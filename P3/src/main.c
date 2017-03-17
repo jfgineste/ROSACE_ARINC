@@ -12,6 +12,9 @@ static void P3_process(void) {
    *			P3 INITIALIZATION			*
    **************************************************************/
   RETURN_CODE_TYPE ret_pause;
+
+//  UNLOCK_PREEMPTION(0, &ret_pause);
+
   int num_instance = 0;
   int pd = 4;
   MESSAGE_SIZE_TYPE len; // don't care
@@ -189,7 +192,7 @@ RETURN_CODE_TYPE ret_process, ret_switch_mode;
     .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = SOFT,
+    .DEADLINE = HARD,
   };
 
   P3_process_attrs.ENTRY_POINT = P3_process;

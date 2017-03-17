@@ -19,6 +19,8 @@ static void P2_process(void) {
   
   static RETURN_CODE_TYPE ret_pause;
 
+//  UNLOCK_PREEMPTION(0, &ret_pause);
+
   int num_instance = 0;
   int pd = 2;
 
@@ -223,7 +225,7 @@ int P2Main(void) {
     .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = SOFT,
+    .DEADLINE = HARD,
   };
 
   P2_process_attrs.ENTRY_POINT = P2_process;

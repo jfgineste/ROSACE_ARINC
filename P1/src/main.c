@@ -13,7 +13,7 @@ static void P1_process(void) {
    ************************************************************/
 
   RETURN_CODE_TYPE ret_pause;
-
+//  UNLOCK_PREEMPTION(0, &ret_pause);
   // output (encapsulated) messages
   msg m_Va, m_h, m_az, m_Vz, m_q;
 
@@ -171,7 +171,7 @@ int P1Main(void) {
     .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = SECOND,
+    .DEADLINE = HARD,
   };
 
   P1_process_attrs.ENTRY_POINT = P1_process;
