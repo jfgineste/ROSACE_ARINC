@@ -157,8 +157,7 @@ static void P1_process(void) {
   }
 }
 
-/************************************************************
- *			P1 END DATA PROCESSING			*
+/************************************************************			P1 END DATA PROCESSING			*
  ************************************************************/
 
 int P1Main(void) {
@@ -168,11 +167,11 @@ int P1Main(void) {
 
 
   PROCESS_ATTRIBUTE_TYPE P1_process_attrs = {
-    .PERIOD = INFINITE_TIME_VALUE,
-    .TIME_CAPACITY = INFINITE_TIME_VALUE,
+    .PERIOD = SECOND, //other values are refused
+    .TIME_CAPACITY = 1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = SOFT,
+    .DEADLINE = SECOND,
   };
 
   P1_process_attrs.ENTRY_POINT = P1_process;
@@ -195,16 +194,16 @@ int P1Main(void) {
   }
 
   RETURN_CODE_TYPE ret;
-  CREATE_SAMPLING_PORT("WH", PORT_SIZE, SOURCE, 1 * SECOND,&WH,&ret);
-  CREATE_SAMPLING_PORT("WAZ", PORT_SIZE, SOURCE, 1 * SECOND,&WAZ,&ret);
-  CREATE_SAMPLING_PORT("WVZ", PORT_SIZE, SOURCE, 1 * SECOND,&WVZ,&ret);
-  CREATE_SAMPLING_PORT("WQ", PORT_SIZE, SOURCE, 1 * SECOND,&WQ,&ret);
-  CREATE_SAMPLING_PORT("WVA", PORT_SIZE, SOURCE, 1 * SECOND,&WVA,&ret);
+  CREATE_SAMPLING_PORT("WH", PORT_SIZE, SOURCE, 0.02 * SECOND,&WH,&ret);
+  CREATE_SAMPLING_PORT("WAZ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WAZ,&ret);
+  CREATE_SAMPLING_PORT("WVZ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WVZ,&ret);
+  CREATE_SAMPLING_PORT("WQ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WQ,&ret);
+  CREATE_SAMPLING_PORT("WVA", PORT_SIZE, SOURCE, 0.02 * SECOND,&WVA,&ret);
 
   printf("[P1] Bilan create output ports: HF=%d AZF=%d RVF=%d QF=%d VA=%d\n", (int) WH, (int) WAZ, (int) WVZ, (int) WQ, (int) WVA);
 
-  CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, 1 * SECOND,&RDELTAEC,&ret);
-  CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, 1 * SECOND,&RDELTATHC,&ret);
+  CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, 0.02 * SECOND,&RDELTAEC,&ret);
+  CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, 0.02 * SECOND,&RDELTATHC,&ret);
 
   printf("[P1] Bilan create input ports: DELTA_EC=%d DELTA_THC=%d\n", (int) RDELTAEC, (int) RDELTATHC);
 
