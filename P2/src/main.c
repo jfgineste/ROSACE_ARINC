@@ -225,7 +225,7 @@ int P2Main(void) {
     .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = HARD,
+    .DEADLINE = SOFT, //errors with hard
   };
 
   P2_process_attrs.ENTRY_POINT = P2_process;

@@ -192,7 +192,7 @@ RETURN_CODE_TYPE ret_process, ret_switch_mode;
     .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = HARD,
+    .DEADLINE = SOFT, //errors with hard
   };
 
   P3_process_attrs.ENTRY_POINT = P3_process;
