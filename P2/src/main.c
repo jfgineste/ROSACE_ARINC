@@ -219,8 +219,8 @@ int P2Main(void) {
   RETURN_CODE_TYPE ret_process, ret_switch_mode;
 
   PROCESS_ATTRIBUTE_TYPE P2_process_attrs = {
-    .PERIOD =  INFINITE_TIME_VALUE, //other values are refused
-    .TIME_CAPACITY = INFINITE_TIME_VALUE,
+    .PERIOD =  -1, //other values are refused
+    .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
     .DEADLINE = SOFT,

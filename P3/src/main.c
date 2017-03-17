@@ -185,8 +185,8 @@ PROCESS_ID_TYPE pid_P3;
 RETURN_CODE_TYPE ret_process, ret_switch_mode; 
 
   PROCESS_ATTRIBUTE_TYPE P3_process_attrs = {
-    .PERIOD = 20, //other values are refused
-    .TIME_CAPACITY = INFINITE_TIME_VALUE,
+    .PERIOD = -1, //other values are refused
+    .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
     .DEADLINE = SOFT,

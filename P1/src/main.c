@@ -167,8 +167,8 @@ int P1Main(void) {
 
 
   PROCESS_ATTRIBUTE_TYPE P1_process_attrs = {
-    .PERIOD = SECOND, //other values are refused
-    .TIME_CAPACITY = 1,
+    .PERIOD = -1, //other values are refused
+    .TIME_CAPACITY = -1,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
     .DEADLINE = SECOND,
