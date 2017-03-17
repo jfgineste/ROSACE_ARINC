@@ -1,0 +1,1 @@
+/opt/cross/bin/powerpc-elf-gcc -o build/e500_highmem/main.o -c -std=gnu99 -iwithprefix include -Wall -Wuninitialized -ffreestanding -nostdlib -nostdinc -g -mregnames -mcpu=e500mc -include /home/jaime/JetOS/libpok/include/config.h -I/home/jaime/JetOS/libpok/include -I/home/jaime/JetOS/libpok/arch/ppc/include src/main.c

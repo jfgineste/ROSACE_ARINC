@@ -1,0 +1,13 @@
+Total     Self      Num       Time Per Call
+Time      Time      Calls     Min       Max       Subprogram
+-----     ----      -----     -------------       ----------
+3201      3201      1         3201      3201      aircraft_dynamics
+541       541       1         541       541       elevator
+428       428       1         428       428       Va_filter
+428       428       1         428       428       h_filter
+391       391       1         391       391       Va_control
+347       347       1         347       347       Vz_control
+334       334       1         334       334       altitude_hold
+283       283       1         283       283       Vz_filter
+283       283       1         283       283       q_filter
+207       207       1         207       207       engine

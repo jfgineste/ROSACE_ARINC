@@ -1,0 +1,1 @@
+qemu-system-ppc -serial stdio -M ppce500 -cpu e500mc -kernel /home/jaime/JetOS/examples/Rosace/build/e500_highmem/pok.elf
