@@ -5,24 +5,17 @@
         <xi:include href="P2/config.xml" parse="xml"/>
         <xi:include href="P3/config.xml" parse="xml"/>
     </Partitions>
-    <Schedule MajorFrameLength="100ms">
+    <Schedule>
+        <Slot Type="Partition" PartitionNameRef="P1" Duration="1000ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P2" Duration="1000ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P3" Duration="1000ms" PeriodicProcessingStart="true" />
+<!--        <Slot Type="Partition" PartitionNameRef="P3" Duration="10ms" PeriodicProcessingStart="true" />
         <Slot Type="Partition" PartitionNameRef="P1" Duration="10ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P2" Duration="10ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P3" Duration="10ms" PeriodicProcessingStart="true" />
         <Slot Type="Partition" PartitionNameRef="P3" Duration="10ms" PeriodicProcessingStart="true" />
         <Slot Type="Partition" PartitionNameRef="P1" Duration="10ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P3" Duration="10ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P1" Duration="10ms" PeriodicProcessingStart="true" />
+-->
     </Schedule> 
 
-    <!--
-        This looks like Connection_Table 
-        found in schema in older ARINC-653 standard,
-        but it's somewhat different (because that old thing
-        is very inconsistent).
-
-        Recent standard doesn't define this at all.
-    -->
 
     <Connection_Table>
 	<!--P1 -> P2 -->

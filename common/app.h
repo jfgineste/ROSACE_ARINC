@@ -8,6 +8,11 @@
 
 #define PORT_SIZE 16
 #define SECOND 1000000000LL
+#define PROCESS_PD SECOND
+#define PROCESS_DL SECOND
+#define PROCESS_DLT SOFT
+//#define SAMPLING_PD 0.02 * SECOND
+#define SAMPLING_PD SECOND
 
 // encapsulation of the message to be sent
 typedef struct {

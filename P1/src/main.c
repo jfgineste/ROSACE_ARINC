@@ -167,11 +167,11 @@ int P1Main(void) {
 
 
   PROCESS_ATTRIBUTE_TYPE P1_process_attrs = {
-    .PERIOD = -1, //other values are refused
-    .TIME_CAPACITY = -1,
+    .PERIOD = PROCESS_PD, //other values are refused
+    .TIME_CAPACITY = PROCESS_DL,
     .STACK_SIZE = 8096, // the only accepted stack size!
     .BASE_PRIORITY = MIN_PRIORITY_VALUE,
-    .DEADLINE = SOFT, //errors with hard
+    .DEADLINE = PROCESS_DLT, //errors with hard
   };
 
   P1_process_attrs.ENTRY_POINT = P1_process;
@@ -182,7 +182,7 @@ int P1Main(void) {
     printf("[P1] couldn't create P1_process: %d\n", (int) ret_process);
     return 1;
   } else {
-    //        printf("[P1] P1_process  created\n");
+            printf("[P1] P1_process  created\n");
   }
 
   START(pid_P1,&ret_process);
@@ -194,16 +194,16 @@ int P1Main(void) {
   }
 
   RETURN_CODE_TYPE ret;
-  CREATE_SAMPLING_PORT("WH", PORT_SIZE, SOURCE, 0.02 * SECOND,&WH,&ret);
-  CREATE_SAMPLING_PORT("WAZ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WAZ,&ret);
-  CREATE_SAMPLING_PORT("WVZ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WVZ,&ret);
-  CREATE_SAMPLING_PORT("WQ", PORT_SIZE, SOURCE, 0.02 * SECOND,&WQ,&ret);
-  CREATE_SAMPLING_PORT("WVA", PORT_SIZE, SOURCE, 0.02 * SECOND,&WVA,&ret);
+  CREATE_SAMPLING_PORT("WH", PORT_SIZE, SOURCE, SAMPLING_PD,&WH,&ret);
+  CREATE_SAMPLING_PORT("WAZ", PORT_SIZE, SOURCE, SAMPLING_PD,&WAZ,&ret);
+  CREATE_SAMPLING_PORT("WVZ", PORT_SIZE, SOURCE, SAMPLING_PD,&WVZ,&ret);
+  CREATE_SAMPLING_PORT("WQ", PORT_SIZE, SOURCE, SAMPLING_PD,&WQ,&ret);
+  CREATE_SAMPLING_PORT("WVA", PORT_SIZE, SOURCE, SAMPLING_PD,&WVA,&ret);
 
   printf("[P1] Bilan create output ports: HF=%d AZF=%d RVF=%d QF=%d VA=%d\n", (int) WH, (int) WAZ, (int) WVZ, (int) WQ, (int) WVA);
 
-  CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, 0.02 * SECOND,&RDELTAEC,&ret);
-  CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, 0.02 * SECOND,&RDELTATHC,&ret);
+  CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAEC,&ret);
+  CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTATHC,&ret);
 
   printf("[P1] Bilan create input ports: DELTA_EC=%d DELTA_THC=%d\n", (int) RDELTAEC, (int) RDELTATHC);
 
