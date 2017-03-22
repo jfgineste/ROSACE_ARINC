@@ -3,14 +3,16 @@
 
 //#include <math.h>
 
-#include "libm.h"
+#include <libm.h>
+#include "libm/math_private.h"
 
+/*
 #include "libm/cos.c"
 #include "libm/sin.c"
 #include "libm/atan.c"
 #include "libm/sqrt.c"
 #include "libm/pow.c"
-
+*/
 
 void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t *outputs){
 

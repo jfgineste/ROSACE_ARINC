@@ -168,6 +168,7 @@ float    tanhf(float x);
 double   trunc(double x);
 float    truncf(float x);
 
+
 #endif
 
 #endif /* POK_NEEDS_LIBMATH */
