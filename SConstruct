@@ -23,7 +23,7 @@ cflags = ''
 SConscript(os.environ['POK_PATH']+'/misc/SConscript', exports = 'cflags')
 
 Import('env')
-env['PARTITIONS'] = ['P1', 'P2', 'P3']
+env['PARTITIONS'] = ['P1', 'P2', 'P3', 'P4']
 env['XML'] = os.path.join(Dir('.').abspath, 'config.xml')
 SConscript(env['POK_PATH']+'/misc/SConscript_base')
 

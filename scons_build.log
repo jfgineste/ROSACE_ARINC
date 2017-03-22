@@ -1,1 +1,1 @@
-qemu-system-ppc -serial stdio -M ppce500 -cpu e500mc -kernel /home/jaime/ROSACE_ARINC/build/e500_highmem/pok.elf
+/opt/cross/bin/powerpc-elf-ld -o P1/build/e500_highmem/part.elf -T /home/jaime/JetOS//kernel/arch/ppc/ldscripts/partition.lds P1/build/e500_highmem/main.o P1/build/e500_highmem/deployment.o /home/jaime/JetOS/build/e500_highmem/libpok/libpok.a /opt/cross/lib/gcc/powerpc-elf/6.3.0/libgcc.a

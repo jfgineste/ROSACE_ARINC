@@ -197,7 +197,10 @@ pok_channel_queuing_t pok_channels_queuing[0] = {
 uint8_t pok_channels_queuing_n = 0;
 
 /****************** Setup sampling channels ***************************/
-pok_channel_sampling_t pok_channels_sampling[12] = {
+pok_channel_sampling_t pok_channels_sampling[13] = {
+    {
+        .max_message_size = 16,
+    },
     {
         .max_message_size = 16,
     },
@@ -236,7 +239,7 @@ pok_channel_sampling_t pok_channels_sampling[12] = {
     },
 };
 
-uint8_t pok_channels_sampling_n = 12;
+uint8_t pok_channels_sampling_n = 13;
 
 /****************** Setup partition0 (auxiliary) **********************/
 // HM partition level selector.
@@ -431,7 +434,7 @@ static pok_port_queuing_t partition_ports_queuing_0[0] = {
 };
 
 // Sampling ports
-static pok_port_sampling_t partition_ports_sampling_0[7] = {
+static pok_port_sampling_t partition_ports_sampling_0[6] = {
     {
         .name = "WH",
         .channel = &pok_channels_sampling[0],
@@ -458,13 +461,8 @@ static pok_port_sampling_t partition_ports_sampling_0[7] = {
         .direction = POK_PORT_DIRECTION_OUT,
     },
     {
-        .name = "RDELTATHC",
-        .channel = &pok_channels_sampling[10],
-        .direction = POK_PORT_DIRECTION_IN,
-    },
-    {
-        .name = "RDELTAEC",
-        .channel = &pok_channels_sampling[11],
+        .name = "RDELTAE",
+        .channel = &pok_channels_sampling[12],
         .direction = POK_PORT_DIRECTION_IN,
     },
 };
@@ -946,9 +944,220 @@ static pok_port_sampling_t partition_ports_sampling_2[7] = {
     },
 };
 
+/****************** Setup partition3 (auxiliary) **********************/
+// HM partition level selector.
+static const pok_error_level_selector_t partition_hm_selector_3 = {
+    .levels = {
+        0, /*POK_ERROR_ID_MODPOSTPROCEVENT_ELIST*/
+        64, /*POK_ERROR_ID_ILLEGAL_REQUEST*/
+        64, /*POK_ERROR_ID_APPLICATION_ERROR*/
+        0, /*POK_ERROR_ID_PARTLOAD_ERROR*/
+        64, /*POK_ERROR_ID_NUMERIC_ERROR*/
+        64, /*POK_ERROR_ID_MEMORY_VIOLATION*/
+        64, /*POK_ERROR_ID_DEADLINE_MISSED*/
+        64, /*POK_ERROR_ID_HARDWARE_FAULT*/
+        64, /*POK_ERROR_ID_POWER_FAIL*/
+        64, /*POK_ERROR_ID_STACK_OVERFLOW*/
+        0, /*POK_ERROR_ID_PROCINIT_ERROR*/
+        0, /*POK_ERROR_ID_NOMEMORY_PROCDATA*/
+        0, /*POK_ERROR_ID_ASSERT*/
+        0, /*POK_ERROR_ID_CONFIG_ERROR*/
+        0, /*POK_ERROR_ID_CHECK_POOL*/
+        0, /*POK_ERROR_ID_UNHANDLED_INT*/
+    }
+};
+// Mapping of process-level errors information.
+static const pok_thread_error_map_t partition_thread_error_info_3 = {
+    .map = {
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_MODPOSTPROCEVENT_ELIST*/
+        {POK_ERROR_KIND_ILLEGAL_REQUEST, "Illegal Request"},        /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        {POK_ERROR_KIND_APPLICATION_ERROR, "Application Error"},        /* POK_ERROR_ID_APPLICATION_ERROR */
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_PARTLOAD_ERROR*/
+        {POK_ERROR_KIND_NUMERIC_ERROR, "Numeric Error"},        /* POK_ERROR_ID_NUMERIC_ERROR */
+        {POK_ERROR_KIND_MEMORY_VIOLATION, "Memory Violation"},        /* POK_ERROR_ID_MEMORY_VIOLATION */
+        {POK_ERROR_KIND_DEADLINE_MISSED, "Deadline Missed"},        /* POK_ERROR_ID_DEADLINE_MISSED */
+        {POK_ERROR_KIND_HARDWARE_FAULT, "Hardware Fault"},        /* POK_ERROR_ID_HARDWARE_FAULT */
+        {POK_ERROR_KIND_POWER_FAIL, "Power Fail"},        /* POK_ERROR_ID_POWER_FAIL */
+        {POK_ERROR_KIND_STACK_OVERFLOW, "Stack Overflow"},        /* POK_ERROR_ID_STACK_OVERFLOW */
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_PROCINIT_ERROR*/
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_NOMEMORY_PROCDATA*/
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_ASSERT*/
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_CONFIG_ERROR*/
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_CHECK_POOL*/
+        {POK_ERROR_KIND_INVALID, NULL}, /*POK_ERROR_ID_UNHANDLED_INT*/
+    }
+};
+
+/* 
+ * Pointer to partition HM table.
+ */
+static const pok_error_hm_partition_t partition_hm_table_3 = {
+    .actions = {
+    /* POK_SYSTEM_STATE_INIT_PARTOS */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_INIT_PARTUSER */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_INTERRUPT_HANDLER */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_OS_MOD */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_OS_PART */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_ERROR_HANDLER */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    /* POK_SYSTEM_STATE_USER */
+    {
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_MODPOSTPROCEVENT_ELIST */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_ILLEGAL_REQUEST */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_APPLICATION_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PARTLOAD_ERROR */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_NUMERIC_ERROR */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_MEMORY_VIOLATION */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_DEADLINE_MISSED */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_HARDWARE_FAULT */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_POWER_FAIL */
+        POK_ERROR_ACTION_COLD_START, /* POK_ERROR_ID_STACK_OVERFLOW */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_PROCINIT_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_NOMEMORY_PROCDATA */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_ASSERT */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CONFIG_ERROR */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_CHECK_POOL */
+        POK_ERROR_ACTION_IDLE, /* POK_ERROR_ID_UNHANDLED_INT */
+    },
+    }
+};
+
+// Threads array
+static pok_thread_t partition_threads_3[10 + 1 /*main thread*/ + 1 /* error thread */];
+
+// Queuing ports
+static pok_port_queuing_t partition_ports_queuing_3[0] = {
+};
+
+// Sampling ports
+static pok_port_sampling_t partition_ports_sampling_3[3] = {
+    {
+        .name = "WDELTAE",
+        .channel = &pok_channels_sampling[12],
+        .direction = POK_PORT_DIRECTION_OUT,
+    },
+    {
+        .name = "RDELTATHC",
+        .channel = &pok_channels_sampling[10],
+        .direction = POK_PORT_DIRECTION_IN,
+    },
+    {
+        .name = "RDELTAEC",
+        .channel = &pok_channels_sampling[11],
+        .direction = POK_PORT_DIRECTION_IN,
+    },
+};
+
 
 /*************** Setup partitions array *******************************/
-pok_partition_arinc_t pok_partitions_arinc[3] = {
+pok_partition_arinc_t pok_partitions_arinc[4] = {
     {
         .base_part = {
             .name = "P1",
@@ -956,8 +1165,8 @@ pok_partition_arinc_t pok_partitions_arinc[3] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 3000000000,
-            .duration = 1000000000,
+            .period = 200000000,
+            .duration = 50000000,
             .partition_id = 0,
 
             .space_id = 1,
@@ -976,7 +1185,7 @@ pok_partition_arinc_t pok_partitions_arinc[3] = {
         .nports_queuing = 0,
 
         .ports_sampling = partition_ports_sampling_0,
-        .nports_sampling = 7, 
+        .nports_sampling = 6, 
         .partition_hm_selector = &partition_hm_selector_0,
 
         .thread_error_info = &partition_thread_error_info_0,
@@ -990,8 +1199,8 @@ pok_partition_arinc_t pok_partitions_arinc[3] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 3000000000,
-            .duration = 1000000000,
+            .period = 200000000,
+            .duration = 50000000,
             .partition_id = 1,
 
             .space_id = 2,
@@ -1024,8 +1233,8 @@ pok_partition_arinc_t pok_partitions_arinc[3] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 3000000000,
-            .duration = 1000000000,
+            .period = 200000000,
+            .duration = 50000000,
             .partition_id = 2,
 
             .space_id = 3,
@@ -1051,9 +1260,43 @@ pok_partition_arinc_t pok_partitions_arinc[3] = {
 
         .partition_hm_table = &partition_hm_table_2,
     },
+    {
+        .base_part = {
+            .name = "P4",
+
+            // Allocate 1 event slot per queuing port plus 2 slots for timer.
+            .partition_event_max = 0 + 2,
+
+            .period = 200000000,
+            .duration = 50000000,
+            .partition_id = 3,
+
+            .space_id = 4,
+
+            .multi_partition_hm_selector = &pok_hm_multi_partition_selector_default,
+            .multi_partition_hm_table = &pok_hm_multi_partition_table_default,
+        },
+
+        .nthreads = 12,
+        .threads = partition_threads_3,
+
+        .main_user_stack_size = 8192, 
+        .heap_size = 13792,
+
+        .ports_queuing = partition_ports_queuing_3,
+        .nports_queuing = 0,
+
+        .ports_sampling = partition_ports_sampling_3,
+        .nports_sampling = 3, 
+        .partition_hm_selector = &partition_hm_selector_3,
+
+        .thread_error_info = &partition_thread_error_info_3,
+
+        .partition_hm_table = &partition_hm_table_3,
+    },
 };
 
-const uint8_t pok_partitions_arinc_n = 3;
+const uint8_t pok_partitions_arinc_n = 4;
 
 #ifdef POK_NEEDS_MONITOR
 /**************************** Monitor *********************************/
@@ -1063,7 +1306,7 @@ pok_partition_t partition_monitor =
 
     .partition_event_max = 0,
 
-    .period = 3000000000, 
+    .period = 200000000, 
     .space_id = 0,
 
     .multi_partition_hm_selector = &pok_hm_multi_partition_selector_default,
@@ -1078,7 +1321,7 @@ pok_partition_t partition_gdb =
 
     .partition_event_max = 0,
 
-    .period = 3000000000, 
+    .period = 200000000, 
     .space_id = 0,
 
     .multi_partition_hm_selector = &pok_hm_multi_partition_selector_default,
@@ -1087,33 +1330,40 @@ pok_partition_t partition_gdb =
 #endif /* POK_NEEDS_GDB*/
 
 /************************* Setup time slots ***************************/
-const pok_sched_slot_t pok_module_sched[3] = {
+const pok_sched_slot_t pok_module_sched[4] = {
     {
-        .duration = 1000000000,
+        .duration = 50000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[0].base_part,
         .periodic_processing_start = TRUE,
         .id = 0
     },
     {
-        .duration = 1000000000,
+        .duration = 50000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[1].base_part,
         .periodic_processing_start = TRUE,
         .id = 1
     },
     {
-        .duration = 1000000000,
+        .duration = 50000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[2].base_part,
         .periodic_processing_start = TRUE,
         .id = 2
     },
+    {
+        .duration = 50000000,
+        .offset = 0,
+        .partition = &pok_partitions_arinc[3].base_part,
+        .periodic_processing_start = TRUE,
+        .id = 3
+    },
 };
 
-const uint8_t pok_module_sched_n = 3;
+const uint8_t pok_module_sched_n = 4;
 
-const pok_time_t pok_config_scheduling_major_frame = 3000000000;
+const pok_time_t pok_config_scheduling_major_frame = 200000000;
 
 /************************ Memory blocks ************************/
 #include <core/memblocks_config.h>
@@ -1141,7 +1391,7 @@ size_t jet_memory_blocks_n = 0;
 #include <arch/deployment.h>
 #include <arch/mmu_ext.h>
 
-struct ja_ppc_space ja_spaces[3] =
+struct ja_ppc_space ja_spaces[4] =
 {
     {
         .phys_base = 0x4000000UL + 0 * POK_PARTITION_MEMORY_SIZE,
@@ -1161,9 +1411,15 @@ struct ja_ppc_space ja_spaces[3] =
         .size_heap = 13792,
         // .size_total is calculated on initialization.
     },
+    {
+        .phys_base = 0x4000000UL + 3 * POK_PARTITION_MEMORY_SIZE,
+        .size_normal = 1048576,
+        .size_heap = 13792,
+        // .size_total is calculated on initialization.
+    },
 };
 
-int ja_spaces_n = 3;
+int ja_spaces_n = 4;
 
 /************************ Memory mapping ************************/
 

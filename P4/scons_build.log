@@ -1,0 +1,1 @@
+template_render_action(["build/e500_highmem/deployment.c"], ["config.xml"])

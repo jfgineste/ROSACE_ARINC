@@ -8,11 +8,12 @@
 
 #define PORT_SIZE 16
 #define SECOND 1000000000LL
-#define PROCESS_PD SECOND
-#define PROCESS_DL SECOND
+#define PROCESS_PD 0.2*SECOND
+#define PROCESS_DL 0.2*SECOND
 #define PROCESS_DLT SOFT
 //#define SAMPLING_PD 0.02 * SECOND
-#define SAMPLING_PD SECOND
+#define SAMPLING_PD 200000000LL
+#define msg aircraft_dynamics_outs_t
 
 // encapsulation of the message to be sent
 typedef struct {
@@ -21,4 +22,4 @@ typedef struct {
   unsigned y; // ?? from original sourcecode
   RETURN_CODE_TYPE ret; // status of the message
 }
-__attribute__((packed)) msg; // this attribute optimize the space used by the structure
+__attribute__((packed)) aircraft_dynamics_outs_t; // this attribute optimize the space used by the structure

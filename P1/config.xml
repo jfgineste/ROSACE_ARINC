@@ -11,13 +11,12 @@
     <ARINC653_Semaphores Count="16" />
 
     <ARINC653_Ports>
-        <Sampling_Port Name="WH" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="WAZ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s" />
-        <Sampling_Port Name="WVZ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s" />
-        <Sampling_Port Name="WQ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s" />
-        <Sampling_Port Name="WVA" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s" />
-        <Sampling_Port Name="RDELTATHC" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s" />
-        <Sampling_Port Name="RDELTAEC" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s" />
+        <Sampling_Port Name="WH" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="WAZ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms" />
+        <Sampling_Port Name="WVZ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms" />
+        <Sampling_Port Name="WQ" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms" />
+        <Sampling_Port Name="WVA" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms" />
+        <Sampling_Port Name="RDELTAE" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms" />
     </ARINC653_Ports>
     <HM_Table>
         <Error Code="POK_ERROR_KIND_DEADLINE_MISSED" Level="PROCESS" ErrorCode="DEADLINE_MISSED" Action="COLD_START" />

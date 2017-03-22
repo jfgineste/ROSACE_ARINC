@@ -26,8 +26,8 @@ static void P3_process(void) {
   // input (encapsulated) messages
   msg m_Va_f, m_h_f, m_az_f, m_Vz_f, m_q_f;
 
-  m_delta_ec.x = 0;
-  m_delta_thc.x = 0;
+  m_delta_ec.x = 1;
+  m_delta_thc.x = 1;
   m_delta_ec.y = -1;
   m_delta_thc.y = -1;
   unsigned last_m_h_f;
@@ -49,7 +49,7 @@ static void P3_process(void) {
 
   while (1) {
 
-    if (num_instance == 0) {
+//    if (num_instance == 0) {
 
       /******************************************************************
        * 				P3 IN				*
@@ -66,7 +66,7 @@ static void P3_process(void) {
         printf("[P3] RH: warning: received message out of order\n");
       } else if (m_h_f.x > last_m_h_f + 1) {
         printf("[P3] RHF: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_h_f, m_h_f.x);
-      } else if (m_h_f.x == last_m_h_f&&last_m_h_f != 0) {
+      } else if (m_h_f.x == last_m_h_f) {
         printf("[P3] RHF: warning: possible duplicate message (id=%d)\n", m_h_f.x);
       }
       last_m_h_f = m_h_f.x;
@@ -84,7 +84,7 @@ static void P3_process(void) {
         printf("[P3] RAZF: warning: received message out of order\n");
       } else if (m_az_f.x > last_m_az_f + 1) {
         printf("[P3] RAZF: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_az_f, m_az_f.x);
-      } else if (m_az_f.x == last_m_az_f&&last_m_az_f != 0) {
+      } else if (m_az_f.x == last_m_az_f) {
         printf("[P3] RAZF: warning: possible duplicate message (id=%d)\n", m_az_f.x);
       }
       last_m_az_f = m_az_f.x;
@@ -101,7 +101,7 @@ static void P3_process(void) {
         printf("[P3] RVZF: warning: received message out of order\n");
       } else if (m_Vz_f.x > last_m_Vz_f + 1) {
         printf("[P3] RVZF: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_Vz_f, m_Vz_f.x);
-      } else if (m_Vz_f.x == last_m_Vz_f&&last_m_Vz_f != 0) {
+      } else if (m_Vz_f.x == last_m_Vz_f) {
         printf("[P3] RVZF: warning: possible duplicate message (id=%d)\n", m_Vz_f.x);
       }
       last_m_Vz_f = m_Vz_f.x;
@@ -118,7 +118,7 @@ static void P3_process(void) {
         printf("[P3] RQF: warning: received message out of order\n");
       } else if (m_q_f.x > last_m_q_f + 1) {
         printf("[P3] RQF: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_q_f, m_q_f.x);
-      } else if (m_q_f.x == last_m_q_f&&last_m_q_f != 0) {
+      } else if (m_q_f.x == last_m_q_f) {
         printf("[P3] RQF: warning: possible duplicate message (id=%d)\n", m_q_f.x);
       }
       last_m_q_f = m_q_f.x;
@@ -128,14 +128,14 @@ static void P3_process(void) {
       if (m_Va_f.ret == NO_ERROR) {
         printf("[P3] RVAF: new message read: {%u, \"%f\", %u}\n", m_Va_f.x, m_Va_f.data, m_Va_f.y);
       } else {
-        printf("[P3] Va_f: Unable to read message: %u\n", m_Va_f.ret);
+        printf("[P3] RVAF: Unable to read message: %u\n", m_Va_f.ret);
       }
 
       if (m_Va_f.x < last_m_Va_f) {
         printf("[P3] RVAF: warning: received message out of order\n");
       } else if (m_Va_f.x > last_m_Va_f + 1) {
         printf("[P3] RVAF: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_Va_f, m_Va_f.x);
-      } else if (m_Va_f.x == last_m_Va_f&&last_m_Va_f != 0) {
+      } else if (m_Va_f.x == last_m_Va_f) {
         printf("[P3] RVAF: warning: possible duplicate message (id=%d)\n", m_Va_f.x);
       }
       last_m_Va_f = m_Va_f.x;
@@ -153,8 +153,8 @@ static void P3_process(void) {
       m_delta_thc.data = Va_control(m_Va_f.data, m_Vz_f.data, m_q_f.data, Va_c);
       WRITE_SAMPLING_MESSAGE(WDELTATHC, (MESSAGE_ADDR_TYPE)&m_delta_thc, sizeof(m_delta_thc),&m_delta_thc.ret);
 
-      printf("[P3] DELTAEC: new message sent: {%u, \"%f\", %u}\n", m_delta_ec.x, m_delta_ec.data, m_delta_ec.y);
-      printf("[P3] DELTATHC: new message sent: {%u, \"%f\", %u}\n", m_delta_thc.x, m_delta_thc.data, m_delta_thc.y);
+      printf("[P3] WDELTAEC: new message sent: {%u, \"%f\", %u}\n", m_delta_ec.x, m_delta_ec.data, m_delta_ec.y);
+      printf("[P3] WDELTATHC: new message sent: {%u, \"%f\", %u}\n", m_delta_thc.x, m_delta_thc.data, m_delta_thc.y);
 
       if (m_delta_ec.ret != NO_ERROR) {
         printf("[P3] WDELTAEC: error during writing on sampling: %d\n", m_delta_ec.ret);
@@ -169,7 +169,7 @@ static void P3_process(void) {
        * 				P3 END OUT			*
        ************************************************************/
 
-    }
+//    }
     PERIODIC_WAIT(&ret_pause);
     if (ret_pause!=NO_ERROR) {printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
     num_instance = (num_instance + 1) % pd;

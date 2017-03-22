@@ -3,7 +3,7 @@
 #include "../../common/app.h"
 #include "../../common/app_code.c"
 
-static SAMPLING_PORT_ID_TYPE RDELTAEC, RDELTATHC;
+static SAMPLING_PORT_ID_TYPE RDELTAE;
 static SAMPLING_PORT_ID_TYPE WH, WAZ, WVZ, WQ, WVA;
 
 static void P1_process(void) {
@@ -18,32 +18,31 @@ static void P1_process(void) {
   msg m_Va, m_h, m_az, m_Vz, m_q;
 
   // input (encapsulated) messages
-  msg m_delta_ec, m_delta_thc;
+  msg m_delta_e;
 
-  float T, delta_e;
+  float T;
   struct aircraft_dynamics_outs_t res; //structure pour accueillir les résultats de aircraft_dynamics
 
   MESSAGE_SIZE_TYPE len; // don't care
   VALIDITY_TYPE validity; // don't care
-  unsigned last_m_delta_ec = 0;
-  unsigned last_m_delta_thc = 0;
+  unsigned last_m_delta_e = 0;
 
   int num_instance = 0;
-  int pd = 1000;
+//  int pd = 1000;
 
-  m_h.x = 0;
-  m_az.x = 0;
-  m_Vz.x = 0;
-  m_q.x = 0;
-  m_Va.x = 0;
+  m_h.x = 1;
+  m_az.x = 1;
+  m_Vz.x = 1;
+  m_q.x = 1;
+  m_Va.x = 1;
   m_h.y = -1;
   m_az.y = -1;
   m_Vz.y = -1;
   m_q.y = -1;
   m_Va.y = -1;
   T = 41813.92119463;
-  delta_e = 0.012009615652468;
 
+  static int initialized=0;
   PERIODIC_WAIT(&ret_pause);
   if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d \n\n",ret_pause);}
 
@@ -60,8 +59,29 @@ static void P1_process(void) {
     /************************************************************
      *  P1 OUT (THE ONLY PARTITION WHICH RECEIVES AFTER SENDING) *
      ************************************************************/
+if (initialized>0){
+    //READ DELTAE
+    READ_SAMPLING_MESSAGE(RDELTAE, (MESSAGE_ADDR_TYPE)&m_delta_e,&len,&validity,&m_delta_e.ret);
+    if (m_delta_e.ret == NO_ERROR) {
+		//if (num_instance % pd == 0) {
+			printf("[P1] RDELTAE: new message read: {%u, \"%f\", %u}\n", m_delta_e.x, m_delta_e.data, m_delta_e.y);
+		//}
+    } else {
+      printf("[P1] RDELTAE: Unable to read message: %u\n", m_delta_e.ret);
+    }
 
-    aircraft_dynamics(delta_e, T,&res);
+    if (m_delta_e.x < last_m_delta_e) {
+      printf("[P1] RDELTAEC: warning: received message out of order\n");
+    } else if (m_delta_e.x > last_m_delta_e + 1) {
+      printf("[P1] RDELTAEC: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_delta_e, m_delta_e.x);
+    } else if (m_delta_e.x == last_m_delta_e) {
+      printf("[P1] RDELTAEC: warning: possible duplicate message (id=%d)\n", m_delta_e.x);
+    }
+    last_m_delta_e = m_delta_e.x;
+
+}
+    initialized=1;   
+    aircraft_dynamics(m_delta_e.data, T,&res);
 
     m_h.data = res.h;
     m_az.data = res.az;
@@ -75,14 +95,14 @@ static void P1_process(void) {
     WRITE_SAMPLING_MESSAGE(WQ, (MESSAGE_ADDR_TYPE)&m_q, sizeof(m_q),&m_q.ret);
     WRITE_SAMPLING_MESSAGE(WVA, (MESSAGE_ADDR_TYPE)&m_Va, sizeof(m_Va),&m_Va.ret);
 
-    if (num_instance % pd == 0) {
-      printf("num_instance %d.%04d\n", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
-      printf("[P1] H: new message sent: {%u, \"%f\", %u}\n", m_h.x, m_h.data, m_h.y);
-      printf("[P1] AZ: new message sent: {%u, \"%f\", %u}\n", m_az.x, m_az.data, m_az.y);
-      printf("[P1] Vz: new message sent: {%u, \"%f\", %u}\n", m_Vz.x, m_Vz.data, m_Vz.y);
-      printf("[P1] Q: new message sent: {%u, \"%f\", %u}\n", m_q.x, m_q.data, m_q.y);
-      printf("[P1] VA: new message sent: {%u, \"%f\", %u}\n", m_Va.x, m_Va.data, m_Va.y);
-    }
+//    if (num_instance % pd == 0) {
+//      printf("num_instance %d.%04d\n", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
+      printf("[P1] WH: new message sent: {%u, \"%f\", %u}\n", m_h.x, m_h.data, m_h.y);
+      printf("[P1] WAZ: new message sent: {%u, \"%f\", %u}\n", m_az.x, m_az.data, m_az.y);
+      printf("[P1] WVZ: new message sent: {%u, \"%f\", %u}\n", m_Vz.x, m_Vz.data, m_Vz.y);
+      printf("[P1] WQ: new message sent: {%u, \"%f\", %u}\n", m_q.x,m_q.data, m_q.y);
+      printf("[P1] WVA: new message sent: {%u, \"%f\", %u}\n", m_Va.x, m_Va.data, m_Va.y);
+//    }
 
     num_instance += 5;
     // run during 10 minutes
@@ -104,57 +124,7 @@ static void P1_process(void) {
     PERIODIC_WAIT(&ret_pause);
     if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
 
-
-
-    /************************************************************
-    *			P1 DATA PROCESSING			*
-    ************************************************************/
-
-
-    /************************************************************
-     *	P1 IN (THE ONLY PARTITION WHICH SENDS BEFORE RECEIVING)	*
-     ************************************************************/
-    READ_SAMPLING_MESSAGE(RDELTAEC, (MESSAGE_ADDR_TYPE)&m_delta_ec,&len,&validity,&m_delta_ec.ret);
-    if (m_delta_ec.ret == NO_ERROR) {
-      if (num_instance % pd == 0) {printf("[P1] RDELTAEC: new message read: {%u, \"%f\", %u}\n", m_delta_ec.x, m_delta_ec.data, m_delta_ec.y);}
-    } else {
-      printf("[P1] RDELTAEC: Unable to read message: %u\n", m_delta_ec.ret);
-    }
-
-    if (m_delta_ec.x < last_m_delta_ec) {
-      printf("[P1] RDELTAEC: warning: received message out of order\n");
-    } else if (m_delta_ec.x > last_m_delta_ec + 1) {
-      printf("[P1] RDELTAEC: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_delta_ec, m_delta_ec.x);
-    } else if (m_delta_ec.x == last_m_delta_ec&&last_m_delta_ec != 0) {
-      printf("[P1] RDELTAEC: warning: possible duplicate message (id=%d)\n", m_delta_ec.x);
-    }
-    last_m_delta_ec = m_delta_ec.x;
-
-    // READ DELTAETHC
-    READ_SAMPLING_MESSAGE(RDELTATHC, (MESSAGE_ADDR_TYPE)&m_delta_thc,&len,&validity,&m_delta_thc.ret);
-    if (m_delta_thc.ret == NO_ERROR) {
-      if (num_instance % pd == 0) {printf("[P1] RDELTATHC: new message read: {%u, \"%f\", %u}\n", m_delta_thc.x, m_delta_thc.data, m_delta_thc.y);}
-    } else {
-      printf("[P1] RDELTATHC: Unable to read message: %u\n", m_delta_thc.ret);
-    }
-
-    if (m_delta_thc.x < last_m_delta_thc) {
-      printf("[P1] RDELTATHC: warning: received message out of order\n");
-    } else if (m_delta_thc.x > last_m_delta_thc + 1) {
-      printf("[P1] RDELTATHC: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_delta_thc, m_delta_thc.x);
-    } else if (m_delta_thc.x == last_m_delta_thc&&last_m_delta_thc != 0) {
-      printf("[P1] RDELTATHC: warning: possible duplicate  (id=%d)\n", m_delta_thc.x);
-    }
-    last_m_delta_thc = m_delta_thc.x;
-
-    /************************************************************
-     *				P1 END IN		 	*
-     ************************************************************/
-	//pause until next slot
-    PERIODIC_WAIT(&ret_pause);
-    if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
-
-  }
+}
 }
 
 /************************************************************			P1 END DATA PROCESSING			*
@@ -202,10 +172,9 @@ int P1Main(void) {
 
   printf("[P1] Bilan create output ports: HF=%d AZF=%d RVF=%d QF=%d VA=%d\n", (int) WH, (int) WAZ, (int) WVZ, (int) WQ, (int) WVA);
 
-  CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAEC,&ret);
-  CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTATHC,&ret);
+  CREATE_SAMPLING_PORT("RDELTAE", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAE,&ret);
 
-  printf("[P1] Bilan create input ports: DELTA_EC=%d DELTA_THC=%d\n", (int) RDELTAEC, (int) RDELTATHC);
+  printf("[P1] Bilan create input ports: DELTA_E=%d\n", (int) RDELTAE);
 
   SET_PARTITION_MODE(NORMAL,&ret_switch_mode);
   printf("[P1] SWITCHED TO NORMAL \n");

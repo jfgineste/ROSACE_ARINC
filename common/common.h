@@ -1,6 +1,14 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
-
+#define POK_NEEDS_LIBMATH 1
+/*
+#include "libm/k_cos.c"
+#include "libm/k_sin.c"
+#include "libm/fabs.c"
+#include "libm/e_sqrt.c"
+#include "libm/e_pow.c"
+#include "libm/e_rem_pio2.c"
+*/
 const float __attribute__((weak)) dt       = 1.0f/200.0;
 const float __attribute__((weak)) dt_de    = 1.0/200.0;
 const float __attribute__((weak)) dt_dx    = 1.0/200.0;

@@ -11,16 +11,16 @@
     <ARINC653_Semaphores Count="16" />
 
     <ARINC653_Ports>
-        <Sampling_Port Name="WHF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="WAZF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="WVZF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="WQF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="WVAF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="RH" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="RAZ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="RVZ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="RQ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s"/>
-        <Sampling_Port Name="RVA" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="1s"/>
+        <Sampling_Port Name="WHF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="WAZF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="WVZF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="WQF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="WVAF" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="RH" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="RAZ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="RVZ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="RQ" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms"/>
+        <Sampling_Port Name="RVA" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="200ms"/>
         
     </ARINC653_Ports>
     <HM_Table>

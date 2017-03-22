@@ -27,11 +27,11 @@ static void P2_process(void) {
   MESSAGE_SIZE_TYPE len; // don't care
   VALIDITY_TYPE Validity; // don't care
 
-  m_h_f.x = 0;
-  m_az_f.x = 0;
-  m_Vz_f.x = 0;
-  m_q_f.x = 0;
-  m_Va_f.x = 0;
+  m_h_f.x = 1;
+  m_az_f.x = 1;
+  m_Vz_f.x = 1;
+  m_q_f.x = 1;
+  m_Va_f.x = 1;
   m_h_f.y = -1;
   m_az_f.y = -1;
   m_Vz_f.y = -1;
@@ -56,7 +56,7 @@ static void P2_process(void) {
 
   while (1) {
 
-    if (num_instance == 0) {
+//    if (num_instance == 0) {
 
       /******************************************************************
        * 				P2 IN				*
@@ -74,7 +74,7 @@ static void P2_process(void) {
         printf("[P2] RH: warning: received message out of order\n");
       } else if (m_h.x > last_m_h + 1) {
         printf("[P2] RH: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_h, m_h.x);
-      } else if (m_h.x == last_m_h  &&last_m_h != 0) {
+      } else if (m_h.x == last_m_h) {
         printf("[P2] RH: warning: possible duplicate message (id=%d)\n", m_h.x );
       }
       last_m_h = m_h.x;
@@ -91,7 +91,7 @@ static void P2_process(void) {
         printf("[P2] RAZ: warning: received message out of order\n");
       } else if (m_az.x > last_m_az + 1) {
         printf("[P2] RAZ: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_az, m_az.x);
-      } else if (m_az.x == last_m_az  &&last_m_az != 0) {
+      } else if (m_az.x == last_m_az) {
         printf("[P2] RAZ: warning: possible duplicate (id=%d)\n", m_az.x);
       }
       last_m_az = m_az.x;
@@ -108,7 +108,7 @@ static void P2_process(void) {
         printf("[P2] RVZ: warning: received message out of order\n");
       } else if (m_Vz.x > last_m_Vz + 1) {
         printf("[P2] RVZ: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_Vz, m_Vz.x);
-      } else if (m_Vz.x == last_m_Vz  &&last_m_Vz != 0) {
+      } else if (m_Vz.x == last_m_Vz) {
         printf("[P2] RVZ: warning: possible duplicate message (id=%d)\n", m_Vz.x);
       }
       last_m_Vz = m_Vz.x;
@@ -125,7 +125,7 @@ static void P2_process(void) {
         printf("[P2] RQ: warning: received message out of order\n");
       } else if (m_q.x > last_m_q + 1) {
         printf("[P2] RQ: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_q, m_q.x);
-      } else if (m_q.x == last_m_q  &&last_m_q != 0) {
+      } else if (m_q.x == last_m_q) {
         printf("[P2] RQ: warning: possible duplicate message (id=%d)\n", m_q.x);
       }
       last_m_q = m_q.x;
@@ -142,7 +142,7 @@ static void P2_process(void) {
         printf("[P2] RVA: warning: received message out of order\n");
       } else if (m_Va.x > last_m_Va + 1) {
         printf("[P2] RVA: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_Va, m_Va.x);
-      } else if (m_Va.x == last_m_Va  &&last_m_Va != 0) {
+      } else if (m_Va.x == last_m_Va) {
         printf("[P2] RVA: warning: possible duplicate message (id=%d)\n", m_Va.x);
       }
       last_m_Va = m_Va.x;
@@ -166,29 +166,29 @@ static void P2_process(void) {
       WRITE_SAMPLING_MESSAGE(WVAF, (MESSAGE_ADDR_TYPE)  &m_Va_f, sizeof(m_Va_f),  &m_Va_f.ret);;
 
       if (m_h_f.ret != NO_ERROR) {
-        printf("[P2] HF: error during writing on sampling: %u\n", m_h_f.ret);
+        printf("[P2] WHF: error during writing on sampling: %u\n", m_h_f.ret);
       } else {
-        printf("[P2] HF: new message sent: {%u, \"%f\", %u}\n", m_h_f.x, m_h_f.data, m_h_f.y);
+        printf("[P2] WHF: new message sent: {%u, \"%f\", %u}\n", m_h_f.x, m_h_f.data, m_h_f.y);
       }
       if (m_az_f.ret != NO_ERROR) {
-        printf("[P2] AZF: error during writing on sampling: %u\n", m_az_f.ret);
+        printf("[P2] WAZF: error during writing on sampling: %u\n", m_az_f.ret);
       } else {
-        printf("[P2] AZF: new message sent: {%u, \"%f\", %u}\n", m_az_f.x, m_az_f.data, m_az_f.y);
+        printf("[P2] WAZF: new message sent: {%u, \"%f\", %u}\n", m_az_f.x, m_az_f.data, m_az_f.y);
       }
       if (m_Vz_f.ret != NO_ERROR) {
-        printf("[P2] VZF: error during writing on sampling: %u\n", m_Vz_f.ret);
+        printf("[P2] WVZF: error during writing on sampling: %u\n", m_Vz_f.ret);
       } else {
-        printf("[P2] VZF: new message sent: {%u, \"%f\", %u}\n", m_Vz_f.x, m_Vz_f.data, m_Vz_f.y);
+        printf("[P2] WVZF: new message sent: {%u, \"%f\", %u}\n", m_Vz_f.x, m_Vz_f.data, m_Vz_f.y);
       }
       if (m_q_f.ret != NO_ERROR) {
-        printf("[P2] QF: error during writing on sampling: %u\n", m_q_f.ret);
+        printf("[P2] WQF: error during writing on sampling: %u\n", m_q_f.ret);
       } else {
-        printf("[P2] QF: new message sent: {%u, \"%f\", %u}\n", m_q_f.x, m_q_f.data, m_q_f.y);
+        printf("[P2] WQF: new message sent: {%u, \"%f\", %u}\n", m_q_f.x, m_q_f.data, m_q_f.y);
       }
       if (m_Va.ret != NO_ERROR) {
-        printf("[P2] VAF: error during writing on sampling: %u\n", m_Va.ret);
+        printf("[P2] WVAF: error during writing on sampling: %u\n", m_Va.ret);
       } else {
-        printf("[P2] VAF: new message sent: {%u, \"%f\", %u}\n", m_Va_f.x, m_Va_f.data, m_Va_f.y);
+        printf("[P2] WVAF: new message sent: {%u, \"%f\", %u}\n", m_Va_f.x, m_Va_f.data, m_Va_f.y);
       }
 
       //printf("[P2] Bilan du write : %d %d %d %d %d [message_size=%d]\n",(int) m_h_f.ret,(int) m_az.ret,(int) m_Vz.ret,(int) m_q.ret,(int) m_Va.ret,(int) sizeof(m_h_f));
@@ -202,7 +202,7 @@ static void P2_process(void) {
        * 				P2 END OUT			*
        ************************************************************/
 
-    }
+//    }
     PERIODIC_WAIT(&ret_pause);
     if (ret_pause!=NO_ERROR) {printf("\n\n[P2] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
     num_instance = (num_instance + 1) % pd;
