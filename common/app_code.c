@@ -4,15 +4,6 @@
 //#include <math.h>
 
 #include <libm.h>
-#include "libm/math_private.h"
-
-/*
-#include "libm/cos.c"
-#include "libm/sin.c"
-#include "libm/atan.c"
-#include "libm/sqrt.c"
-#include "libm/pow.c"
-*/
 
 void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t *outputs){
 
@@ -53,7 +44,9 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 	printf("[AC_DYN] [DEBUT] Va_eq=%f, theta_eq=%f, cos(theta_eq)=%f, sin(theta_eq)=%f, u=%f, w=%f\n",Va_eq,theta_eq,cos(theta_eq),sin(theta_eq),u,w);
 	}
 
-	printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, sqrt(1)=%f, pow(2,3)=%f\n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679), sqrt(1), pow(2,2));
+	int toto = 1 << 24;
+	printf ("**** %lf\n",  sqrt ((double) toto));
+	printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, sqrt(1)=%f, pow(2,3)=%f\n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679), (float)sqrt(1.0), (float)pow(2.0,2.0));
 	
 
 	rho   = rho0 * pow(1.0 + T0_h / T0_0 * h,- g0 / (Rs * T0_h) - 1.0);
@@ -173,3 +166,4 @@ engine(float delta_th_c) {
 
 	return y;
 }
+
