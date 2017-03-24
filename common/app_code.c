@@ -33,7 +33,7 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
     static float qbar 	= 0.0;
     static float V 	= 0.0;
     static float rho 	= 0.0;
-    static float Pi	= (float) 3.14159;
+//    static float Pi	= (float) 3.14159;
 
     if (debut==1) {
 

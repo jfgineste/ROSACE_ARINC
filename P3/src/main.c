@@ -16,8 +16,8 @@ static void P3_process(void) {
     int num_instance_operatoire = 0;
     int num_instance_totale = 0;
 
-    int pd_operatoire = 4;
-    int pd_totale = 10;
+//    int pd_operatoire = 4;
+    int pd_totale = 5;
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE validity; // don't care
 
@@ -31,11 +31,13 @@ static void P3_process(void) {
     m_delta_thc.x = 1;
     m_delta_ec.y = -1;
     m_delta_thc.y = -1;
+#if (MODE == VERBOSE)
     unsigned last_m_h_f;
     unsigned last_m_az_f;
     unsigned last_m_Vz_f;
     unsigned last_m_q_f;
     unsigned last_m_Va_f;
+#endif
 
     PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)
@@ -149,11 +151,13 @@ static void P3_process(void) {
         }
 #endif
 
+#if (MODE==VERBOSE)
         last_m_h_f = m_h_f.x;
         last_m_az_f = m_az_f.x;
         last_m_Vz_f = m_Vz_f.x;
         last_m_q_f = m_q_f.x;
         last_m_Va_f = m_Va_f.x;
+#endif
 
         /******************************************************************
          * 				P3 END IN			*
@@ -202,7 +206,7 @@ static void P3_process(void) {
             printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
         }
 #endif
-        num_instance_operatoire = (num_instance_operatoire + 1) % pd_operatoire;
+        //num_instance_operatoire = (num_instance_operatoire + 1) % pd_operatoire;
         num_instance_totale = (num_instance_totale + 1) % pd_totale;
 
     }

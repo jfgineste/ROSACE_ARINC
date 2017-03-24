@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include "../../common/app.h"
 #include "../../common/app2_code.c"
@@ -37,11 +38,13 @@ static void P2_process(void) {
     m_q_f.y = -1;
     m_Va_f.y = -1;
 
+#if (MODE==VERBOSE)
     unsigned last_m_h = 0;
     unsigned last_m_az = 0;
     unsigned last_m_Vz = 0;
     unsigned last_m_q = 0;
     unsigned last_m_Va = 0;
+#endif
 
     PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)
@@ -156,11 +159,13 @@ static void P2_process(void) {
         }
 #endif
 
+#if (MODE==VERBOSE)
         last_m_h = m_h.x;
         last_m_az = m_az.x;
         last_m_Vz = m_Vz.x;
         last_m_q = m_q.x;
         last_m_Va = m_Va.x;
+#endif
 
         /************************************************************
          * 				P2 END IN			*

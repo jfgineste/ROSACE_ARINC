@@ -1,0 +1,18 @@
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Building targets ...
+misc/run_cmd ...
+Timer interval: 400000
+POK kernel initialized
+# Vertical Speed control: 0 m/s -> 2.5 m/s and Airspeed: 230 m/s
+# Column headers are:
+# - T: simulation time [s] 
+# - Va: airspeed [m/s]
+# - az: normal acceleration [m/s^2] 
+# - q: pitch rate [rad/s] 
+# - Vz: vertical speed [m/s] 
+# - h: altitude [m] 
+# - delta_th_c: commanded throttle [-] 
+# - delta_e_c: commanded elevator deflection [rad] 
+# T, Va, Az, q, Vz, h, delta_th_c, delta_e_c
+scons: done building targets.

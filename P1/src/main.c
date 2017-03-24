@@ -25,8 +25,9 @@ static void P1_process(void) {
 
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE validity; // don't care
+#if (MODE==VERBOSE)
     unsigned last_m_delta_e = 0;
-
+#endif
     int num_instance = 0;
     int pd = 1000;
 
@@ -127,10 +128,10 @@ printf("%d.%04d,", num_instance / 1000, num_instance - (num_instance / 1000) * 1
     }
 
 #endif
-        num_instance += 100; // un cycle=20ms
+        num_instance += 200; // un cycle=20ms
 
-        // run during 15 minutes
-        if (num_instance > (1000 * 60 * 10)) {
+        // run during 60 minutes
+        if (num_instance > (1000 * 60 * 60)) {
             STOP_SELF();
         }
         m_h.x++;
