@@ -1,4 +1,3 @@
-#include <string.h>
 #include <stdio.h>
 #include "../../common/app.h"
 #include "../../common/app2_code.c"
@@ -61,7 +60,7 @@ static void P2_process(void) {
 
     while (1) {
 
-//    if (num_instance == 0) {
+    if (num_instance == 0) {
 
         /******************************************************************
          * 				P2 IN				*
@@ -221,7 +220,7 @@ static void P2_process(void) {
          * 				P2 END OUT			*
          ************************************************************/
 
-//    }
+    }
 
         PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)

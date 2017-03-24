@@ -8,12 +8,14 @@
 
 #define PORT_SIZE 16
 #define SECOND 1000000000LL
-#define PROCESS_PD 400000000LL
-#define PROCESS_DL 400000000LL
+#define PROCESS_PD 100000000LL
+#define PROCESS_DL 100000000LL
 #define PROCESS_DLT SOFT
 //#define SAMPLING_PD 0.02 * SECOND
-#define SAMPLING_PD 200000000LL
-#define msg aircraft_dynamics_outs_t
+//#define SAMPLING_PD 5000000LL
+#define SAMPLING_PD 0LL
+//#define msg message
+//#define acd_output output_t
 
 typedef
 enum {
@@ -35,4 +37,5 @@ typedef struct {
     unsigned y; // ?? from original sourcecode
     RETURN_CODE_TYPE ret; // status of the message
 }
-__attribute__((packed)) aircraft_dynamics_outs_t; // this attribute optimize the space used by the structure
+__attribute__((packed)) msg; // this attribute optimize the space used by the structure
+

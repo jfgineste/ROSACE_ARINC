@@ -33,6 +33,7 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
     static float qbar 	= 0.0;
     static float V 	= 0.0;
     static float rho 	= 0.0;
+    static float Pi	= (float) 3.14159;
 
     if (debut==1) {
 
@@ -45,8 +46,18 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
         //printf("[AC_DYN] [DEBUT] Va_eq=%f, theta_eq=%f, cos(theta_eq)=%f, sin(theta_eq)=%f, u=%f, w=%f\n",Va_eq,theta_eq,cos(theta_eq),sin(theta_eq),u,w);
     }
     //printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, sqrt(1)=%f, pow(2,3)=%f\n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679), (float)sqrt(1.0), (float)pow(2.0,2.0));
+/*
+printf("[AC_DYN] cos(0)=%f cos(Pi/4)=%f cos(Pi/3)=%f cos(Pi/2)=%f cos(Pi)=%f  cos(4*Pi)=%f\n",cosf(0),cosf(Pi/4.0),cosf(Pi/3.0),cosf(Pi/2.0),cosf(Pi),cosf(4.0*Pi));
 
-//	//printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, \n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679));
+printf("[AC_DYN] sin(0)=%f sin(Pi/4)=%f sin(Pi/3)=%f sin(Pi/2)=%f sin(Pi)=%f  sin(4*Pi)=%f\n",sinf(0),sinf(Pi/4.0),sinf(Pi/3.0),sinf(Pi/2.0),sinf(Pi),sinf(4.0*Pi));
+
+printf("[AC_DYN] atan(0)=%f atan(Pi/4)=%f atan(Pi/3)=%f atan(Pi/2)=%f atan(Pi)=%f  atan(4*Pi)=%f\n",atanf(0),atanf(Pi/4.0),atanf(Pi/3.0),atanf(Pi/2.0),atanf(Pi),atanf(4.0*Pi));
+*/
+/*
+printf("[AC_DYN] pow(0,0)=%f pow(2,3)=%f pow(3,2)=%f pow(1/4,1/2)=%f\n",powf(0.0,0.0),powf(2.0,3.0),powf(3.0,2.0),powf(1/4,1/2));
+printf("[AC_DYN] sqrt(0)=%f sqrt(2)=%f sqrt(4)=%f sqrt(1/4)=%f\n",sqrtf(0.0),sqrtf(2.0),sqrtf(4.0),((1/4)));
+*/
+
 
     rho   = rho0 * powf(1.0 + T0_h / T0_0 * h,- g0 / (Rs * T0_h) - 1.0);
 //	rho   = rho0;

@@ -7,10 +7,10 @@
         <xi:include href="P4/config.xml" parse="xml"/>
     </Partitions>
     <Schedule>
-        <Slot Type="Partition" PartitionNameRef="P1" Duration="100ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P2" Duration="100ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P3" Duration="100ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P4" Duration="100ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P1" Duration="25ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P2" Duration="25ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P3" Duration="25ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P4" Duration="25ms" PeriodicProcessingStart="true" />
     </Schedule> 
 
     <Connection_Table>

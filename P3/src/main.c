@@ -13,8 +13,11 @@ static void P3_process(void) {
      **************************************************************/
     RETURN_CODE_TYPE ret_pause;
 
-    int num_instance = 0;
-    int pd = 4;
+    int num_instance_operatoire = 0;
+    int num_instance_totale = 0;
+
+    int pd_operatoire = 4;
+    int pd_totale = 10;
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE validity; // don't care
 
@@ -51,7 +54,7 @@ static void P3_process(void) {
 
     while (1) {
 
-//    if (num_instance == 0) {
+    if (num_instance_operatoire == 0) {
 
         /******************************************************************
          * 				P3 IN				*
@@ -179,6 +182,7 @@ static void P3_process(void) {
 
         m_delta_ec.x++;
         m_delta_thc.x++;
+}
 
         /************************************************************
          * 				P3 END OUT			*
@@ -186,7 +190,9 @@ static void P3_process(void) {
 
 //    }
 #if (MODE==CSV)
-        printf("%.15f,%.15f\n", m_delta_thc.data, m_delta_ec.data);
+        if (num_instance_totale == 0) {
+            printf("%.15f,%.15f\n", m_delta_thc.data, m_delta_ec.data);
+        }
 #endif
 
         PERIODIC_WAIT(&ret_pause);
@@ -196,7 +202,8 @@ static void P3_process(void) {
             printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
         }
 #endif
-        num_instance = (num_instance + 1) % pd;
+        num_instance_operatoire = (num_instance_operatoire + 1) % pd_operatoire;
+        num_instance_totale = (num_instance_totale + 1) % pd_totale;
 
     }
 

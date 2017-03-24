@@ -1,4 +1,4 @@
-#include <string.h>
+#include <string.h> 
 #include <stdio.h>
 #include "../../common/app.h"
 #include "../../common/app_code.c"
@@ -28,7 +28,7 @@ static void P1_process(void) {
     unsigned last_m_delta_e = 0;
 
     int num_instance = 0;
-//  int pd = 1000;
+    int pd = 1000;
 
     m_h.x = 1;
     m_az.x = 1;
@@ -117,16 +117,20 @@ static void P1_process(void) {
 //    }
 #endif
 
-        num_instance += 5;
 
 
 #if MODE==CSV
-        printf("%d.%04d00000000000,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
+    if (num_instance % pd == 0) {
+        //printf("%d.%04d00000000000,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
+printf("%d.%04d,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
         printf("%.15f,%.15f,%.15f,%.15f,%.15f,",m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
+    }
+
 #endif
+        num_instance += 100; // un cycle=20ms
 
         // run during 15 minutes
-        if (num_instance > (1000 * 60 * 15)) {
+        if (num_instance > (1000 * 60 * 10)) {
             STOP_SELF();
         }
         m_h.x++;
@@ -221,7 +225,7 @@ int P1Main(void) {
 
 void main(void) {
 #if(MODE==CSV)
-    printf("# Vertical Speed control: 0 m/s -> 2.5 m/s and Airspeed: 230 m/s\n# Column headers are:\n# - T: simulation time [s] \n# - Va: airspeed [m/s]\n# - az: normal acceleration [m/s^2] \n# - q: pitch rate [rad/s] \n# - Vz: vertical speed [m/s] \n# - h: altitude [m] \n# - delta_th_c: commanded throttle [-] \n# - delta_e_c: commanded elevator deflection [rad] \n# T, Va, Az, q, Vz, h, delta_th_c, delta_e_c   \n0.000000000000000,230.000000000000028,0.000006963226427,0.000000000000000,0.000000000000000,10000.000000000000000,1.586866079492600,0.012009615652468\n");
+    printf("# Vertical Speed control: 0 m/s -> 2.5 m/s and Airspeed: 230 m/s\n# Column headers are:\n# - T: simulation time [s] \n# - Va: airspeed [m/s]\n# - az: normal acceleration [m/s^2] \n# - q: pitch rate [rad/s] \n# - Vz: vertical speed [m/s] \n# - h: altitude [m] \n# - delta_th_c: commanded throttle [-] \n# - delta_e_c: commanded elevator deflection [rad] \n# T, Va, Az, q, Vz, h, delta_th_c, delta_e_c\n");
 #endif
     P1Main();
     STOP_SELF();
