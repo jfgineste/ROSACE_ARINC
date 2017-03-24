@@ -17,9 +17,9 @@
 
 typedef
 enum {
-   NO_OUT        =  0,    /*  no printf     */
-   VERBOSE       =  1,    /*  all possible out : for debug    */
-   CSV   	 =  2    /*  printf in CSV mode  */
+    NO_OUT        =  0,    /*  no printf     */
+    VERBOSE       =  1,    /*  all possible out : for debug    */
+    CSV   	 =  2    /*  printf in CSV mode  */
 } DISPLAY;
 
 #define NO_OUT 0
@@ -30,9 +30,9 @@ enum {
 
 // encapsulation of the message to be sent
 typedef struct {
-  unsigned x; // date
-  float data; // useful info
-  unsigned y; // ?? from original sourcecode
-  RETURN_CODE_TYPE ret; // status of the message
+    unsigned x; // date
+    float data; // useful info
+    unsigned y; // ?? from original sourcecode
+    RETURN_CODE_TYPE ret; // status of the message
 }
 __attribute__((packed)) aircraft_dynamics_outs_t; // this attribute optimize the space used by the structure
