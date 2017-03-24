@@ -13,7 +13,6 @@ static void P4_process(void) {
    ************************************************************/
 
   RETURN_CODE_TYPE ret_pause;
-//  UNLOCK_PREEMPTION(0, &ret_pause);
   // output (encapsulated) messages
   msg m_delta_e;
 
@@ -39,7 +38,11 @@ static void P4_process(void) {
 
 
   PERIODIC_WAIT(&ret_pause);
-  if (ret_pause!=NO_ERROR) {printf("\n\n[P4] PERIODIC_WAIT ERROR CODE : %d \n\n",ret_pause);}
+  if (ret_pause!=NO_ERROR) {
+#if (MODE==VERBOSE)
+	printf("\n\n[P4] PERIODIC_WAIT ERROR CODE : %d \n\n",ret_pause);
+#endif
+			}
 
   /************************************************************
    *			P4 END INITIALIZATION			*
@@ -56,6 +59,7 @@ static void P4_process(void) {
      ************************************************************/
     //READ DELTAEC
     READ_SAMPLING_MESSAGE(RDELTAEC, (MESSAGE_ADDR_TYPE)&m_delta_ec,&len,&validity,&m_delta_ec.ret);
+#if (MODE==VERBOSE)
     if (m_delta_ec.ret == NO_ERROR) {
 		//if (num_instance % pd == 0) {
 			printf("[P4] RDELTAEC: new message read: {%u, \"%f\", %u}\n", m_delta_ec.x, m_delta_ec.data, m_delta_ec.y);
@@ -71,10 +75,11 @@ static void P4_process(void) {
     } else if (m_delta_ec.x == last_m_delta_ec) {
       printf("[P4] RDELTAEC: warning: possible duplicate message (id=%d)\n", m_delta_ec.x);
     }
-    last_m_delta_ec = m_delta_ec.x;
+#endif
 
     // READ DELTAETHC
     READ_SAMPLING_MESSAGE(RDELTATHC, (MESSAGE_ADDR_TYPE)&m_delta_thc,&len,&validity,&m_delta_thc.ret);
+#if (MODE==VERBOSE)
     if (m_delta_thc.ret == NO_ERROR) {
 		//if (num_instance % pd == 0) {
 			printf("[P4] RDELTATHC: new message read: {%u, \"%f\", %u}\n", m_delta_thc.x, m_delta_thc.data, m_delta_thc.y);
@@ -90,20 +95,32 @@ static void P4_process(void) {
     } else if (m_delta_thc.x == last_m_delta_thc) {
       printf("[P4] RDELTATHC: warning: possible duplicate  (id=%d)\n", m_delta_thc.x);
     }
+#endif
+
+    last_m_delta_ec = m_delta_ec.x;
     last_m_delta_thc = m_delta_thc.x;
+
 
     /************************************************************
      *				P4 END IN		 	*
      ************************************************************/
 
         m_delta_e.data = elevator(m_delta_ec.data);
+#if (MODE==VERBOSE)
 	printf("[P4] >>>> %f ; %f <<<<\n",m_delta_ec.data,elevator(m_delta_ec.data));
+#endif
     	WRITE_SAMPLING_MESSAGE(WDELTAE, (MESSAGE_ADDR_TYPE)&m_delta_e, sizeof(m_delta_e),&m_delta_e.ret);
+#if (MODE==VERBOSE)
 	printf("[P4] WDELTAE: new message sent: {%u, \"%f\", %u}\n", m_delta_e.x, m_delta_e.data, m_delta_e.y);
+#endif
 	//pause until next slot
 	m_delta_e.x++;
     PERIODIC_WAIT(&ret_pause);
-    if (ret_pause!=NO_ERROR) {printf("\n\n[P4] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
+    if (ret_pause!=NO_ERROR) {
+#if (MODE==VERBOSE)
+					printf("\n\n[P4] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
+#endif
+				}
 
   }
 }
@@ -130,33 +147,47 @@ int P4Main(void) {
 
   CREATE_PROCESS(&P4_process_attrs,&pid_P4,&ret_process);
   if (ret_process != NO_ERROR) {
+#if (MODE==VERBOSE)
     printf("[P4] couldn't create P4_process: %d\n", (int) ret_process);
+#endif
     return 1;
   } else {
+#if (MODE==VERBOSE)
             printf("[P4] P4_process  created\n");
+#endif
   }
 
   START(pid_P4,&ret_process);
   if (ret_process != NO_ERROR) {
+#if (MODE==VERBOSE)
     printf("[P4] couldn't start process_1_in: %d\n", (int) ret_process);
+#endif
     return 1;
   } else {
+#if (MODE==VERBOSE)
     printf("[P4] P4_process started (it won't actually run until operating mode becomes NORMAL)\n");
+#endif
   }
 
   RETURN_CODE_TYPE ret;
   CREATE_SAMPLING_PORT("WDELTAE", PORT_SIZE, SOURCE, SAMPLING_PD,&WDELTAE,&ret);
 
+#if (MODE==VERBOSE)
   printf("[P4] Bilan create output ports: DELTAE=%d\n", (int) WDELTAE);
+#endif
 
   CREATE_SAMPLING_PORT("RDELTAEC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAEC,&ret);
   CREATE_SAMPLING_PORT("RDELTATHC", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTATHC,&ret);
 
+#if (MODE==VERBOSE)
   printf("[P4] Bilan create input ports: DELTA_EC=%d DELTA_THC=%d\n", (int) RDELTAEC, (int) RDELTATHC);
+#endif
 
   SET_PARTITION_MODE(NORMAL,&ret_switch_mode);
+#if (MODE==VERBOSE)
   printf("[P4] SWITCHED TO NORMAL \n");
-  // STOP_SELF();
+#endif
+   STOP_SELF();
   return 0;
 }
 

@@ -13,7 +13,7 @@ static void P1_process(void) {
    ************************************************************/
 
   RETURN_CODE_TYPE ret_pause;
-//  UNLOCK_PREEMPTION(0, &ret_pause);
+
   // output (encapsulated) messages
   msg m_Va, m_h, m_az, m_Vz, m_q;
 
@@ -44,7 +44,10 @@ static void P1_process(void) {
 
   static int initialized=0;
   PERIODIC_WAIT(&ret_pause);
-  if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d \n\n",ret_pause);}
+
+#if (MODE==VERBOSE)
+	if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d \n\n",ret_pause);}
+#endif
 
   /************************************************************
    *			P1 END INITIALIZATION			*
@@ -62,10 +65,12 @@ static void P1_process(void) {
 if (initialized>0){
     //READ DELTAE
     READ_SAMPLING_MESSAGE(RDELTAE, (MESSAGE_ADDR_TYPE)&m_delta_e,&len,&validity,&m_delta_e.ret);
+
+#if (MODE==VERBOSE)
     if (m_delta_e.ret == NO_ERROR) {
-		//if (num_instance % pd == 0) {
+//		if (num_instance % pd == 0) {
 			printf("[P1] RDELTAE: new message read: {%u, \"%f\", %u}\n", m_delta_e.x, m_delta_e.data, m_delta_e.y);
-		//}
+//		}
     } else {
       printf("[P1] RDELTAE: Unable to read message: %u\n", m_delta_e.ret);
     }
@@ -78,7 +83,7 @@ if (initialized>0){
       printf("[P1] RDELTAEC: warning: possible duplicate message (id=%d)\n", m_delta_e.x);
     }
     last_m_delta_e = m_delta_e.x;
-
+#endif
 }
     initialized=1;   
     aircraft_dynamics(m_delta_e.data, T,&res);
@@ -95,18 +100,31 @@ if (initialized>0){
     WRITE_SAMPLING_MESSAGE(WQ, (MESSAGE_ADDR_TYPE)&m_q, sizeof(m_q),&m_q.ret);
     WRITE_SAMPLING_MESSAGE(WVA, (MESSAGE_ADDR_TYPE)&m_Va, sizeof(m_Va),&m_Va.ret);
 
+ 
+
+
+#if MODE == VERBOSE 
 //    if (num_instance % pd == 0) {
-//      printf("num_instance %d.%04d\n", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
+printf("MODE=%d, NO_OUT=%d, VERBOSE=%d, CSV=%d\n",MODE, NO_OUT, VERBOSE, CSV);
+      printf("num_instance %d.%04d\n", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
       printf("[P1] WH: new message sent: {%u, \"%f\", %u}\n", m_h.x, m_h.data, m_h.y);
       printf("[P1] WAZ: new message sent: {%u, \"%f\", %u}\n", m_az.x, m_az.data, m_az.y);
       printf("[P1] WVZ: new message sent: {%u, \"%f\", %u}\n", m_Vz.x, m_Vz.data, m_Vz.y);
       printf("[P1] WQ: new message sent: {%u, \"%f\", %u}\n", m_q.x,m_q.data, m_q.y);
       printf("[P1] WVA: new message sent: {%u, \"%f\", %u}\n", m_Va.x, m_Va.data, m_Va.y);
 //    }
+#endif
 
-    num_instance += 5;
-    // run during 10 minutes
-    if (num_instance > (1000 * 60 * 10)) {
+   num_instance += 5;
+
+
+#if MODE==CSV
+          printf("%d.%04d00000000000,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
+          printf("%.15f,%.15f,%.15f,%.15f,%.15f,",m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
+#endif
+
+    // run during 15 minutes
+    if (num_instance > (1000 * 60 * 15)) {
       STOP_SELF();
     }
     m_h.x++;
@@ -118,14 +136,19 @@ if (initialized>0){
     /************************************************************
      *				P1 END OUT		 	*
      ************************************************************/
-
+//printf("%f,%f,%f,%f,%f,", m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
 
 	//PERIOD WAIT BETWEEN SEND AND RECEIVE
     PERIODIC_WAIT(&ret_pause);
-    if (ret_pause!=NO_ERROR) {printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
+#if (MODE==VERBOSE)
+    if (ret_pause!=NO_ERROR) {
+			printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
+				}
+#endif
 
 }
 }
+
 
 /************************************************************			P1 END DATA PROCESSING			*
  ************************************************************/
@@ -148,20 +171,23 @@ int P1Main(void) {
   strncpy(P1_process_attrs.NAME, "P1_process", sizeof(PROCESS_NAME_TYPE));
 
   CREATE_PROCESS(&P1_process_attrs,&pid_P1,&ret_process);
+#if (MODE==VERBOSE)
   if (ret_process != NO_ERROR) {
     printf("[P1] couldn't create P1_process: %d\n", (int) ret_process);
     return 1;
   } else {
             printf("[P1] P1_process  created\n");
   }
-
+#endif
   START(pid_P1,&ret_process);
+#if (MODE==VERBOSE)
   if (ret_process != NO_ERROR) {
     printf("[P1] couldn't start process_1_in: %d\n", (int) ret_process);
     return 1;
   } else {
     printf("[P1] P1_process started (it won't actually run until operating mode becomes NORMAL)\n");
   }
+#endif
 
   RETURN_CODE_TYPE ret;
   CREATE_SAMPLING_PORT("WH", PORT_SIZE, SOURCE, SAMPLING_PD,&WH,&ret);
@@ -170,19 +196,31 @@ int P1Main(void) {
   CREATE_SAMPLING_PORT("WQ", PORT_SIZE, SOURCE, SAMPLING_PD,&WQ,&ret);
   CREATE_SAMPLING_PORT("WVA", PORT_SIZE, SOURCE, SAMPLING_PD,&WVA,&ret);
 
+
+#if (MODE==VERBOSE)
   printf("[P1] Bilan create output ports: HF=%d AZF=%d RVF=%d QF=%d VA=%d\n", (int) WH, (int) WAZ, (int) WVZ, (int) WQ, (int) WVA);
+#endif
+
 
   CREATE_SAMPLING_PORT("RDELTAE", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAE,&ret);
 
+#if (MODE==VERBOSE)
   printf("[P1] Bilan create input ports: DELTA_E=%d\n", (int) RDELTAE);
+#endif
 
   SET_PARTITION_MODE(NORMAL,&ret_switch_mode);
+#if (MODE==VERBOSE)
   printf("[P1] SWITCHED TO NORMAL \n");
-  // STOP_SELF();
+#endif
+
+   STOP_SELF();
   return 0;
 }
 
 void main(void) {
+#if(MODE==CSV)
+printf("# Vertical Speed control: 0 m/s -> 2.5 m/s and Airspeed: 230 m/s\n# Column headers are:\n# - T: simulation time [s] \n# - Va: airspeed [m/s]\n# - az: normal acceleration [m/s^2] \n# - q: pitch rate [rad/s] \n# - Vz: vertical speed [m/s] \n# - h: altitude [m] \n# - delta_th_c: commanded throttle [-] \n# - delta_e_c: commanded elevator deflection [rad] \n# T, Va, Az, q, Vz, h, delta_th_c, delta_e_c   \n0.000000000000000,230.000000000000028,0.000006963226427,0.000000000000000,0.000000000000000,10000.000000000000000,1.586866079492600,0.012009615652468\n");
+#endif
   P1Main();
   STOP_SELF();
 }

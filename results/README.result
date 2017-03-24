@@ -1,0 +1,21 @@
+This directory contains reference results of the case study.
+
+- simulink-run-* are simulink simulation
+- lsmc_run-nort-* are functional (non-realtime) simulation  with SchedMCore
+- tilera-run-* are Tilera realtime execution
+
+One can check the properties of the results like this:
+
+$ ./check_result.py --check-flight-mode VerticalSpeed simulink-run-scenario1-results.csv
+Checking for Vertical Speed control...
+Properties for Vz output
+P1 (settling time      ) = 8.22 s
+P2 (overshoot          ) = 4.71922808971343 %
+P3 (rise time          ) = 5.085000000000001 s
+P4 (steady state error ) = 0.8269464235113589 %
+
+simulink-run-scenario1-results.csv is a VerticalSpeed control scenario
+simulink-run-scenario2-results.csv is an AirSpeed control scenario
+simulink-run-scenario3-results.csv is a LevelChange control scenario
+all
+ lsmc_run-nort-* and tilera-run-* are LevelChange control scenarii.

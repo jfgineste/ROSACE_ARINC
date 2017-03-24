@@ -13,8 +13,6 @@ static void P3_process(void) {
    **************************************************************/
   RETURN_CODE_TYPE ret_pause;
 
-//  UNLOCK_PREEMPTION(0, &ret_pause);
-
   int num_instance = 0;
   int pd = 4;
   MESSAGE_SIZE_TYPE len; // don't care
@@ -37,7 +35,11 @@ static void P3_process(void) {
   unsigned last_m_Va_f;
 
   PERIODIC_WAIT(&ret_pause);
-    if (ret_pause!=NO_ERROR) {printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
+#if (MODE==VERBOSE)
+    if (ret_pause!=NO_ERROR) {
+			printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d(1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
+				}
+#endif
 
   /**************************************************************
    *			P3 END INITIALIZATION			*
@@ -56,6 +58,7 @@ static void P3_process(void) {
        *****************************************************************/
 
       READ_SAMPLING_MESSAGE(RHF, (MESSAGE_ADDR_TYPE)&m_h_f,&len,&validity,&m_h_f.ret);
+#if (MODE==VERBOSE)
       if (m_h_f.ret == NO_ERROR) {
         printf("[P3] RHF: new message read: {%u, \"%f\", %u}\n", m_h_f.x, m_h_f.data, m_h_f.y);
       } else {
@@ -69,11 +72,11 @@ static void P3_process(void) {
       } else if (m_h_f.x == last_m_h_f) {
         printf("[P3] RHF: warning: possible duplicate message (id=%d)\n", m_h_f.x);
       }
-      last_m_h_f = m_h_f.x;
-      //            TIMED_WAIT(SECOND,&ret_timer_in);
+#endif
 
       // READ azf
       READ_SAMPLING_MESSAGE(RAZF, (MESSAGE_ADDR_TYPE)&m_az_f,&len,&validity,&m_az_f.ret);
+#if (MODE==VERBOSE)
       if (m_az_f.ret == NO_ERROR) {
         printf("[P3] RAZF: new message read: {%u, \"%f\", %u}\n", m_az_f.x, m_az_f.data, m_az_f.y);
       } else {
@@ -87,10 +90,11 @@ static void P3_process(void) {
       } else if (m_az_f.x == last_m_az_f) {
         printf("[P3] RAZF: warning: possible duplicate message (id=%d)\n", m_az_f.x);
       }
-      last_m_az_f = m_az_f.x;
+#endif
 
       // READ VZF
       READ_SAMPLING_MESSAGE(RVZF, (MESSAGE_ADDR_TYPE)&m_Vz_f,&len,&validity,&m_Vz_f.ret);
+#if (MODE==VERBOSE)
       if (m_Vz_f.ret == NO_ERROR) {
         printf("[P3] RVZF: new message read: {%u, \"%f\", %u}\n", m_Vz_f.x, m_Vz_f.data, m_Vz_f.y);
       } else {
@@ -104,10 +108,11 @@ static void P3_process(void) {
       } else if (m_Vz_f.x == last_m_Vz_f) {
         printf("[P3] RVZF: warning: possible duplicate message (id=%d)\n", m_Vz_f.x);
       }
-      last_m_Vz_f = m_Vz_f.x;
+#endif
 
       // READ QF
       READ_SAMPLING_MESSAGE(RQF, (MESSAGE_ADDR_TYPE)&m_q_f,&len,&validity,&m_q_f.ret);
+#if (MODE==VERBOSE)
       if (m_q_f.ret == NO_ERROR) {
         printf("[P3] RQF: new message read: {%u, \"%f\", %u}\n", m_q_f.x, m_q_f.data, m_q_f.y);
       } else {
@@ -121,10 +126,11 @@ static void P3_process(void) {
       } else if (m_q_f.x == last_m_q_f) {
         printf("[P3] RQF: warning: possible duplicate message (id=%d)\n", m_q_f.x);
       }
-      last_m_q_f = m_q_f.x;
+#endif
 
       // READ VAF
       READ_SAMPLING_MESSAGE(RVAF, (MESSAGE_ADDR_TYPE)&m_Va_f,&len,&validity,&m_Va_f.ret);
+#if (MODE==VERBOSE)
       if (m_Va_f.ret == NO_ERROR) {
         printf("[P3] RVAF: new message read: {%u, \"%f\", %u}\n", m_Va_f.x, m_Va_f.data, m_Va_f.y);
       } else {
@@ -138,6 +144,12 @@ static void P3_process(void) {
       } else if (m_Va_f.x == last_m_Va_f) {
         printf("[P3] RVAF: warning: possible duplicate message (id=%d)\n", m_Va_f.x);
       }
+#endif
+
+      last_m_h_f = m_h_f.x;
+      last_m_az_f = m_az_f.x;
+      last_m_Vz_f = m_Vz_f.x;
+      last_m_q_f = m_q_f.x;
       last_m_Va_f = m_Va_f.x;
 
       /******************************************************************
@@ -153,6 +165,7 @@ static void P3_process(void) {
       m_delta_thc.data = Va_control(m_Va_f.data, m_Vz_f.data, m_q_f.data, Va_c);
       WRITE_SAMPLING_MESSAGE(WDELTATHC, (MESSAGE_ADDR_TYPE)&m_delta_thc, sizeof(m_delta_thc),&m_delta_thc.ret);
 
+#if (MODE==VERBOSE)
       printf("[P3] WDELTAEC: new message sent: {%u, \"%f\", %u}\n", m_delta_ec.x, m_delta_ec.data, m_delta_ec.y);
       printf("[P3] WDELTATHC: new message sent: {%u, \"%f\", %u}\n", m_delta_thc.x, m_delta_thc.data, m_delta_thc.y);
 
@@ -162,6 +175,8 @@ static void P3_process(void) {
       if (m_delta_thc.ret != NO_ERROR) {
         printf("[P3] WDELTATHC: error during writing on sampling: %u\n", m_delta_thc.ret);
       }
+#endif
+
       m_delta_ec.x++;
       m_delta_thc.x++;
 
@@ -170,8 +185,17 @@ static void P3_process(void) {
        ************************************************************/
 
 //    }
+#if (MODE==CSV)
+printf("%.15f,%.15f\n", m_delta_thc.data, m_delta_ec.data);
+#endif
+
     PERIODIC_WAIT(&ret_pause);
-    if (ret_pause!=NO_ERROR) {printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);}
+
+#if (MODE==VERBOSE)
+    if (ret_pause!=NO_ERROR) {
+				printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
+				}
+#endif
     num_instance = (num_instance + 1) % pd;
 
   }
@@ -199,26 +223,34 @@ RETURN_CODE_TYPE ret_process, ret_switch_mode;
   strncpy(P3_process_attrs.NAME, "P3_process", sizeof(PROCESS_NAME_TYPE));
 
   CREATE_PROCESS(&P3_process_attrs,&pid_P3,&ret_process);
+#if (MODE==VERBOSE)
   if (ret_process != NO_ERROR) {
     printf("[P3] couldn't create P3_process: %d\n", (int) ret_process);
     return 1;
   } else {
     printf("[P3] P3_process  created\n");
   }
+#endif
 
   START(pid_P3,&ret_process);
   if (ret_process != NO_ERROR) {
+#if (MODE==VERBOSE)
     printf("[P3] couldn't start P3_process: %d\n", (int) ret_process);
+#endif
     return 1;
   } else {
+#if (MODE==VERBOSE)
     printf("[P3] P3_process started (it won't actually run until operating mode becomes NORMAL)\n");
+#endif
   }
 
   RETURN_CODE_TYPE ret;
   CREATE_SAMPLING_PORT("WDELTAEC", PORT_SIZE, SOURCE, SAMPLING_PD,&WDELTAEC,&ret);
   CREATE_SAMPLING_PORT("WDELTATHC", PORT_SIZE, SOURCE, SAMPLING_PD,&WDELTATHC,&ret);
 
+#if (MODE==VERBOSE)
   printf("[P3] Bilan create output ports: DELTA_EC=%d DELTA_THC=%d\n", (int) WDELTAEC, (int) WDELTATHC);
+#endif
 
   CREATE_SAMPLING_PORT("RHF", PORT_SIZE, DESTINATION, SAMPLING_PD,&RHF,&ret);
   CREATE_SAMPLING_PORT("RAZF", PORT_SIZE, DESTINATION, SAMPLING_PD,&RAZF,&ret);
@@ -226,10 +258,15 @@ RETURN_CODE_TYPE ret_process, ret_switch_mode;
   CREATE_SAMPLING_PORT("RQF", PORT_SIZE, DESTINATION, SAMPLING_PD,&RQF,&ret);
   CREATE_SAMPLING_PORT("RVAF", PORT_SIZE, DESTINATION, SAMPLING_PD,&RVAF,&ret);
 
+#if (MODE==VERBOSE)
   printf("[P3] Bilan create input ports: HF=%d AZF=%d RVF=%d QF=%d VA=%d\n", (int) RHF, (int) RAZF, (int) RVZF, (int) RQF, (int) RVAF);
+#endif
+
 
   SET_PARTITION_MODE(NORMAL,&ret_switch_mode);
+#if (MODE==VERBOSE)
   printf("[P3] SWITCHED TO NORMAL \n");
+#endif
   return 0;
 }
 

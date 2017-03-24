@@ -42,23 +42,23 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 		theta = theta_eq;
 		h     = h_eq;
 		debut = 0;
-	printf("[AC_DYN] [DEBUT] Va_eq=%f, theta_eq=%f, cos(theta_eq)=%f, sin(theta_eq)=%f, u=%f, w=%f\n",Va_eq,theta_eq,cos(theta_eq),sin(theta_eq),u,w);
+	//printf("[AC_DYN] [DEBUT] Va_eq=%f, theta_eq=%f, cos(theta_eq)=%f, sin(theta_eq)=%f, u=%f, w=%f\n",Va_eq,theta_eq,cos(theta_eq),sin(theta_eq),u,w);
 	}
-	printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, sqrt(1)=%f, pow(2,3)=%f\n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679), (float)sqrt(1.0), (float)pow(2.0,2.0));
+	//printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, sqrt(1)=%f, pow(2,3)=%f\n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679), (float)sqrt(1.0), (float)pow(2.0,2.0));
 
-//	printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, \n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679));	
+//	//printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, \n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679));	
 
 	rho   = rho0 * pow(1.0 + T0_h / T0_0 * h,- g0 / (Rs * T0_h) - 1.0);
 //	rho   = rho0;
 
 
-	printf("[AC_DYN] alpha=%f - w=%f - u=%f - atan(w/u)=%f\n",alpha,w,u,atan(w/u));
+	//printf("[AC_DYN] alpha=%f - w=%f - u=%f - atan(w/u)=%f\n",alpha,w,u,atan(w/u));
 
 	alpha = atan(w/u);
 	/* print_float(alpha, "alpha:"); */
 	/* print_float(w, "w:"); */
 	/* print_float(u, "u:"); */
-	printf("[AC_DYN] V: u=%f - w=%f\n",u,w);
+	//printf("[AC_DYN] V: u=%f - w=%f\n",u,w);
 	V     = sqrt(u * u + w * w);
 //	V     = (u * u + w * w);
 
@@ -69,10 +69,10 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 	/* print_float(CL_alpha,"CL_alpha:"); */
 	/* print_float(alpha_0,"alpha_0:"); */
 	CD    = CD_0 + CD_deltae * delta_e + CD_alpha * (alpha - alpha_0) * (alpha - alpha_0);
-	printf("[AC_DYN] Cm : Cm_0=%f - Cm_deltae=%f - delta_e=%f - Cm_alpha=%f - alpha=%f - Cm_q=%f - q=%f - cbar=%f - V=%f\n",Cm_0,Cm_deltae,delta_e,Cm_alpha, alpha, Cm, q, cbar, V);
+	//printf("[AC_DYN] Cm : Cm_0=%f - Cm_deltae=%f - delta_e=%f - Cm_alpha=%f - alpha=%f - Cm_q=%f - q=%f - cbar=%f - V=%f\n",Cm_0,Cm_deltae,delta_e,Cm_alpha, alpha, Cm, q, cbar, V);
 	Cm    = Cm_0 + Cm_deltae * delta_e + Cm_alpha * alpha + 0.5 * Cm_q * q * cbar / V;
 
-	printf("[AC_DYN] alpha: alpha=%f - cos(alpha)=%f\n",alpha,cos(alpha));
+	//printf("[AC_DYN] alpha: alpha=%f - cos(alpha)=%f\n",alpha,cos(alpha));
 
 	Xa    = - qbar * S * (CD * cos(alpha) - CL * sin(alpha));
 	Za    = - qbar * S * (CD * sin(alpha) + CL * cos(alpha));
@@ -87,7 +87,7 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 	/* print_float((CD * sin(alpha) + CL * cos(alpha)), "le plus"); */
 	/* print_float(qbar * S,"qbar * S"); */
 	/* print_float(Za, "Za:"); */
-	printf("[AC_DYN] Ma: qbar=%f - cbar=%f - S=%f - Cm=%f\n",qbar,cbar,S,Cm);
+	//printf("[AC_DYN] Ma: qbar=%f - cbar=%f - S=%f - Cm=%f\n",qbar,cbar,S,Cm);
 	Ma    = qbar * cbar * S * Cm;
 
 	// Output
@@ -102,18 +102,18 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
 	outputs -> h  = h;
 	// State Equation
-	printf("[AC_DYN] u_dot: g0=%f - theta=%f - q=%f - w=%f - Xa=%f - T=%f - masse=%f\n",g0,theta,q,w,Xa,T,masse);
+	//printf("[AC_DYN] u_dot: g0=%f - theta=%f - q=%f - w=%f - Xa=%f - T=%f - masse=%f\n",g0,theta,q,w,Xa,T,masse);
 	u_dot     = - g0 * sin (theta) - q * w + (Xa + T) / masse;
 	w_dot     = g0 * cos (theta) + q * u + Za / masse;
-	printf("[AC_DYN] q_dot Ma=%f - I_y=%f\n",Ma,I_y);
+	//printf("[AC_DYN] q_dot Ma=%f - I_y=%f\n",Ma,I_y);
 	q_dot     = Ma / I_y;
 	theta_dot = q;
 	h_dot     = u * sin(theta) - w * cos(theta);
 	// Update State
-	printf("[AC_DYN] u : dt=%f - u_dot=%f\n",dt,u_dot);
+	//printf("[AC_DYN] u : dt=%f - u_dot=%f\n",dt,u_dot);
 	u     += dt * u_dot;
 	w     += dt * w_dot;
-	printf("[AC_DYN] q: dt=%f - q_dot=%f\n",dt,q_dot);
+	//printf("[AC_DYN] q: dt=%f - q_dot=%f\n",dt,q_dot);
 	q     += dt * q_dot;
 	theta += dt * theta_dot;
 	h     += dt * h_dot;
@@ -124,6 +124,7 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
 	// instant++;
 	Time = Time + dt;
+//	printf("%f,",Time);
 }
 
 float

@@ -1,6 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 #define POK_NEEDS_LIBMATH 1
+
 /*
 #include "libm/k_cos.c"
 #include "libm/k_sin.c"
