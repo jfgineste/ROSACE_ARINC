@@ -36,8 +36,8 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
     if (debut==1) {
 
-        u     = Va_eq * cos(theta_eq);
-        w     = Va_eq * sin(theta_eq);
+        u     = Va_eq * cosf(theta_eq);
+        w     = Va_eq * sinf(theta_eq);
         q     = 0.0;
         theta = theta_eq;
         h     = h_eq;
@@ -48,18 +48,18 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
 //	//printf("[AC_DYN] cos(Pi/3)=%f, sin(Pi/2)=%f, atan(Pi/2)=%f, \n",cos(1.0471975512), sin(1.57079632679), atan(1.57079632679));
 
-    rho   = rho0 * pow(1.0 + T0_h / T0_0 * h,- g0 / (Rs * T0_h) - 1.0);
+    rho   = rho0 * powf(1.0 + T0_h / T0_0 * h,- g0 / (Rs * T0_h) - 1.0);
 //	rho   = rho0;
 
 
     //printf("[AC_DYN] alpha=%f - w=%f - u=%f - atan(w/u)=%f\n",alpha,w,u,atan(w/u));
 
-    alpha = atan(w/u);
+    alpha = atanf(w/u);
     /* print_float(alpha, "alpha:"); */
     /* print_float(w, "w:"); */
     /* print_float(u, "u:"); */
     //printf("[AC_DYN] V: u=%f - w=%f\n",u,w);
-    V     = sqrt(u * u + w * w);
+    V     = sqrtf(u * u + w * w);
 //	V     = (u * u + w * w);
 
     qbar  = 0.5 * rho * V * V;
@@ -74,8 +74,8 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
     //printf("[AC_DYN] alpha: alpha=%f - cos(alpha)=%f\n",alpha,cos(alpha));
 
-    Xa    = - qbar * S * (CD * cos(alpha) - CL * sin(alpha));
-    Za    = - qbar * S * (CD * sin(alpha) + CL * cos(alpha));
+    Xa    = - qbar * S * (CD * cosf(alpha) - CL * sinf(alpha));
+    Za    = - qbar * S * (CD * sinf(alpha) + CL * cosf(alpha));
     /* print_float(qbar, "qbar:"); */
     /* print_float(S, "S:"); */
     /* print_float(CD, "CD:"); */
@@ -92,9 +92,9 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
 
     // Output
     outputs -> Va = V;
-    outputs -> Vz = w * cos(theta) - u * sin(theta);
+    outputs -> Vz = w * cosf(theta) - u * sinf(theta);
     outputs -> q  = q;
-    outputs -> az = g0 * cos(theta) + Za / masse;
+    outputs -> az = g0 * cosf(theta) + Za / masse;
     /* print_float(g0, "g0:"); */
     /* print_float(cos(theta), "cos(theta):"); */
     /* print_float(Za, "Za:"); */
@@ -103,12 +103,12 @@ void aircraft_dynamics (float delta_e, float T,  struct aircraft_dynamics_outs_t
     outputs -> h  = h;
     // State Equation
     //printf("[AC_DYN] u_dot: g0=%f - theta=%f - q=%f - w=%f - Xa=%f - T=%f - masse=%f\n",g0,theta,q,w,Xa,T,masse);
-    u_dot     = - g0 * sin (theta) - q * w + (Xa + T) / masse;
-    w_dot     = g0 * cos (theta) + q * u + Za / masse;
+    u_dot     = - g0 * sinf (theta) - q * w + (Xa + T) / masse;
+    w_dot     = g0 * cosf (theta) + q * u + Za / masse;
     //printf("[AC_DYN] q_dot Ma=%f - I_y=%f\n",Ma,I_y);
     q_dot     = Ma / I_y;
     theta_dot = q;
-    h_dot     = u * sin(theta) - w * cos(theta);
+    h_dot     = u * sinf(theta) - w * cosf(theta);
     // Update State
     //printf("[AC_DYN] u : dt=%f - u_dot=%f\n",dt,u_dot);
     u     += dt * u_dot;

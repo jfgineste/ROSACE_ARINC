@@ -25,8 +25,10 @@ static void P4_process(void) {
 
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE validity; // don't care
+#if (MODE == VERBOSE)
     unsigned last_m_delta_ec = 0;
     unsigned last_m_delta_thc = 0;
+#endif
 
 //  int num_instance = 0;
 //  int pd = 1000;
@@ -97,9 +99,10 @@ static void P4_process(void) {
         }
 #endif
 
+#if (MODE == VERBOSE)
         last_m_delta_ec = m_delta_ec.x;
         last_m_delta_thc = m_delta_thc.x;
-
+#endif
 
         /************************************************************
          *				P4 END IN		 	*
