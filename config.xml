@@ -10,7 +10,7 @@
         <Slot Type="Partition" PartitionNameRef="P1" Duration="18ms" PeriodicProcessingStart="true" />
         <Slot Type="Partition" PartitionNameRef="P2" Duration="4ms" PeriodicProcessingStart="true" />
         <Slot Type="Partition" PartitionNameRef="P3" Duration="6ms" PeriodicProcessingStart="true" />
-        <Slot Type="Partition" PartitionNameRef="P4" Duration="16ms" PeriodicProcessingStart="true" />
+        <Slot Type="Partition" PartitionNameRef="P4" Duration="5ms" PeriodicProcessingStart="true" />
     </Schedule> 
 
     <Connection_Table>
