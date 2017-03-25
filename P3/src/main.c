@@ -17,7 +17,8 @@ static void P3_process(void) {
     int num_instance_totale = 0;
 
 //    int pd_operatoire = 4;
-    int pd_totale = 5;
+//    int pd_totale = 20; // 1000ms / 50ms
+    int pd_totale = 1; // 1000ms / 50ms
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE validity; // don't care
 
@@ -39,6 +40,12 @@ static void P3_process(void) {
     unsigned last_m_Va_f;
 #endif
 
+#if (MODE==TIMER)
+	clock_t start, finish; 
+	double duration; 
+#endif
+
+
     PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)
     if (ret_pause!=NO_ERROR) {
@@ -55,6 +62,9 @@ static void P3_process(void) {
      **************************************************************/
 
     while (1) {
+#if (MODE==TIMER)
+	start = clock(); 
+#endif
 
     if (num_instance_operatoire == 0) {
 
@@ -193,6 +203,12 @@ static void P3_process(void) {
          ************************************************************/
 
 //    }
+#if (MODE==TIMER)
+	finish = clock(); 
+	duration = (double) (finish - start) / (double)CLOCKS_PER_SEC; 
+	printf("%f,",duration);
+#endif
+
 #if (MODE==CSV)
         if (num_instance_totale == 0) {
             printf("%.15f,%.15f\n", m_delta_thc.data, m_delta_ec.data);

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../../common/app.h"
 #include "../../common/app2_code.c"
-
+#include <time.h>
 static SAMPLING_PORT_ID_TYPE RH, RAZ, RVZ, RQ, RVA;
 static SAMPLING_PORT_ID_TYPE WHF, WAZF, WVZF, WQF, WVAF;
 
@@ -46,6 +46,11 @@ static void P2_process(void) {
     unsigned last_m_Va = 0;
 #endif
 
+#if (MODE==TIMER)
+	clock_t start, finish; 
+	double duration; 
+#endif
+
     PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)
     if (ret_pause!=NO_ERROR) {
@@ -62,6 +67,9 @@ static void P2_process(void) {
      **************************************************************/
 
     while (1) {
+#if (MODE==TIMER)
+	start = clock(); 
+#endif
 
     if (num_instance == 0) {
 
@@ -226,6 +234,11 @@ static void P2_process(void) {
          ************************************************************/
 
     }
+#if (MODE==TIMER)
+	finish = clock(); 
+	duration = (double) (finish - start) / (double)CLOCKS_PER_SEC; 
+	printf("%f,",duration);
+#endif
 
         PERIODIC_WAIT(&ret_pause);
 #if (MODE==VERBOSE)

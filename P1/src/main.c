@@ -1,5 +1,6 @@
 #include <string.h> 
 #include <stdio.h>
+
 #include "../../common/app.h"
 #include "../../common/app_code.c"
 
@@ -29,7 +30,14 @@ static void P1_process(void) {
     unsigned last_m_delta_e = 0;
 #endif
     int num_instance = 0;
-    int pd = 1000;
+//    int pd = 1000;
+    int pd = 44;
+
+
+#if (MODE==TIMER)
+	clock_t start, finish; 
+	double duration; 
+#endif
 
     m_h.x = 1;
     m_az.x = 1;
@@ -61,6 +69,9 @@ static void P1_process(void) {
      ************************************************************/
 
     while (1) {
+#if (MODE==TIMER)
+	start = clock(); 
+#endif
 
         /************************************************************
          *  P1 OUT (THE ONLY PARTITION WHICH RECEIVES AFTER SENDING) *
@@ -122,16 +133,15 @@ static void P1_process(void) {
 
 #if MODE==CSV
     if (num_instance % pd == 0) {
-        //printf("%d.%04d00000000000,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
-printf("%d.%04d,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
-        printf("%.15f,%.15f,%.15f,%.15f,%.15f,",m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
+        printf("%d.%03d00000000000,%.15f,%.15f,%.15f,%.15f,%.15f,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000,m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
+//printf("%d.%04d,", num_instance / 1000, num_instance - (num_instance / 1000) * 1000);
     }
 
 #endif
-        num_instance += 200; // un cycle=20ms
+        num_instance += 44; // un cycle=44ms
 
-        // run during 60 minutes
-        if (num_instance > (1000 * 60 * 60)) {
+        // run during 10 minutes
+        if (num_instance > (1000 * 60 * 10)) {
             STOP_SELF();
         }
         m_h.x++;
@@ -140,13 +150,21 @@ printf("%d.%04d,", num_instance / 1000, num_instance - (num_instance / 1000) * 1
         m_q.x++;
         m_Va.x++;
 
+
         /************************************************************
          *				P1 END OUT		 	*
          ************************************************************/
-//printf("%f,%f,%f,%f,%f,", m_Va.data, m_az.data, m_q.data, m_Vz.data, m_h.data);
+
+#if (MODE==TIMER)
+	finish = clock(); 
+	duration = (double) (finish - start) / (double)CLOCKS_PER_SEC; 
+	printf("%f,",duration);
+#endif
+
 
         //PERIOD WAIT BETWEEN SEND AND RECEIVE
         PERIODIC_WAIT(&ret_pause);
+
 #if (MODE==VERBOSE)
         if (ret_pause!=NO_ERROR) {
             printf("\n\n[P1] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);

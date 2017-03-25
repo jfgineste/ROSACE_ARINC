@@ -5,11 +5,12 @@
 #include <arinc653/time.h>
 #include <arinc653/queueing.h>
 #include <arinc653/sampling.h>
+#include <time.h>
 
 #define PORT_SIZE 16
 #define SECOND 1000000000LL
-#define PROCESS_PD 200000000LL
-#define PROCESS_DL 200000000LL
+#define PROCESS_PD 100000000LL
+#define PROCESS_DL 100000000LL
 //#define PROCESS_DL 0LL
 
 #define PROCESS_DLT SOFT
@@ -29,6 +30,7 @@ enum {
 #define NO_OUT 0
 #define VERBOSE 1
 #define CSV 2
+#define TIMER 3
 
 #define MODE CSV
 

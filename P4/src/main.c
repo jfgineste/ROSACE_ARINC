@@ -38,6 +38,10 @@ static void P4_process(void) {
     m_delta_e.data = delta_e;
     m_delta_e.y = -1;
 
+#if (MODE==TIMER)
+	clock_t start, finish; 
+	double duration; 
+#endif
 
     PERIODIC_WAIT(&ret_pause);
     if (ret_pause!=NO_ERROR) {
@@ -55,6 +59,9 @@ static void P4_process(void) {
      ************************************************************/
 
     while (1) {
+#if (MODE==TIMER)
+	start = clock(); 
+#endif
 
         /************************************************************
          *	P4 IN (THE ONLY PARTITION WHICH SENDS BEFORE RECEIVING)	*
@@ -118,6 +125,13 @@ static void P4_process(void) {
 #endif
         //pause until next slot
         m_delta_e.x++;
+
+#if (MODE==TIMER)
+	finish = clock(); 
+	duration = (double) (finish - start) / (double)CLOCKS_PER_SEC; 
+	printf("%f\n",duration);
+#endif
+
         PERIODIC_WAIT(&ret_pause);
         if (ret_pause!=NO_ERROR) {
 #if (MODE==VERBOSE)
