@@ -126,9 +126,11 @@ printf("[AC_DYN] sqrt(0)=%f sqrt(2)=%f sqrt(4)=%f sqrt(1/4)=%f\n",sqrtf(0.0),sqr
     w     += dt * w_dot;
     //printf("[AC_DYN] q: dt=%f - q_dot=%f\n",dt,q_dot);
     q     += dt * q_dot;
+//printf("[%f,%f],",dt,q_dot);
     theta += dt * theta_dot;
     h     += dt * h_dot;
 
+//	printf("\nVz=%f,theta=%f,u=%f,w=%f,w=%f,w=%f\n",outputs -> Vz,theta,u,w);
 
     static float Time = 0.0;
 

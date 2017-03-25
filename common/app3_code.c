@@ -7,6 +7,7 @@ altitude_hold(float h_f, float h_c) {
     static float Ts_h = 1.0/50.0;
     static float integrator = 532.2730285;
 
+//printf(",,%f,%f,,",h_f, h_c);
     if ((h_f - h_c) < -50) {
         // Output
         y = Vz_c;

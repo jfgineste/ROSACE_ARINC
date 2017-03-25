@@ -16,7 +16,7 @@ static void P3_process(void) {
     int num_instance_operatoire = 0;
     int num_instance_totale = 0;
 
-//    int pd_operatoire = 4;
+    int pd_operatoire = 1;
 //    int pd_totale = 20; // 1000ms / 50ms
     int pd_totale = 1; // 1000ms / 50ms
     MESSAGE_SIZE_TYPE len; // don't care
@@ -72,6 +72,7 @@ static void P3_process(void) {
          * 				P3 IN				*
          *****************************************************************/
 
+//	printf("\nhf=%f,azf=%f,vzf=%f,qf=%f,vaf=%f\n",m_h_f.data, m_az_f.data, m_Vz_f.data, m_q_f.data, m_Va_f.data);
         READ_SAMPLING_MESSAGE(RHF, (MESSAGE_ADDR_TYPE)&m_h_f,&len,&validity,&m_h_f.ret);
 #if (MODE==VERBOSE)
         if (m_h_f.ret == NO_ERROR) {
@@ -222,7 +223,7 @@ static void P3_process(void) {
             printf("\n\n[P3] PERIODIC_WAIT ERROR CODE : %d (1=NO_ACTION;2=NOT_AVAILABLE;3=INVALID_PARAM;4=INVALID_CONFIG;5=INVALID_MODE;6=TIMED_OUT)\n\n",ret_pause);
         }
 #endif
-        //num_instance_operatoire = (num_instance_operatoire + 1) % pd_operatoire;
+        num_instance_operatoire = (num_instance_operatoire + 1) % pd_operatoire;
         num_instance_totale = (num_instance_totale + 1) % pd_totale;
 
     }

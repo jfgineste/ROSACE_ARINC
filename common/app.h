@@ -16,7 +16,7 @@
 #define PROCESS_DLT SOFT
 //#define SAMPLING_PD 0.02 * SECOND
 //#define SAMPLING_PD 5000000LL
-#define SAMPLING_PD 0LL
+#define SAMPLING_PD 3000000LL
 //#define msg message
 //#define acd_output output_t
 
@@ -24,7 +24,8 @@ typedef
 enum {
     NO_OUT        =  0,    /*  no printf     */
     VERBOSE       =  1,    /*  all possible out : for debug    */
-    CSV   	 =  2    /*  printf in CSV mode  */
+    CSV   	 =  2,    /*  printf in CSV mode  */
+    TIMER   	 =  3    /*  to compute execution times  */
 } DISPLAY;
 
 #define NO_OUT 0

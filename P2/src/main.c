@@ -22,7 +22,7 @@ static void P2_process(void) {
 //  UNLOCK_PREEMPTION(0, &ret_pause);
 
     int num_instance = 0;
-    int pd = 2;
+    int pd = 1;
 
     MESSAGE_SIZE_TYPE len; // don't care
     VALIDITY_TYPE Validity; // don't care
@@ -192,7 +192,8 @@ static void P2_process(void) {
         WRITE_SAMPLING_MESSAGE(WQF, (MESSAGE_ADDR_TYPE)  &m_q_f, sizeof(m_q_f),  &m_q_f.ret);
         m_Va_f.data = Va_filter(m_Va.data);
         WRITE_SAMPLING_MESSAGE(WVAF, (MESSAGE_ADDR_TYPE)  &m_Va_f, sizeof(m_Va_f),  &m_Va_f.ret);;
-
+//	printf("Rh=%f,az=%f,vz=%f,q=%f,va=%f\n\n",m_h.data, m_az.data, m_Vz.data, m_q.data, m_Va.data);
+//	printf("hf=%f,azf=%f,vzf=%f,qf=%f,vaf=%f\n\n",m_h_f.data, m_az_f.data, m_Vz_f.data, m_q_f.data, m_Va_f.data);
 #if (MODE==VERBOSE)
         if (m_h_f.ret != NO_ERROR) {
             printf("[P2] WHF: error during writing on sampling: %u\n", m_h_f.ret);

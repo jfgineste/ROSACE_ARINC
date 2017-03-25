@@ -108,6 +108,8 @@ static void P1_process(void) {
         m_q.data = res.q;
         m_Va.data = res.Va;
 
+//	printf("\nWh=%f,az=%f,vz=%f,q=%f,va=%f\n",m_h.data, m_az.data, m_Vz.data, m_q.data, m_Va.data);
+
         WRITE_SAMPLING_MESSAGE(WH, (MESSAGE_ADDR_TYPE)&m_h, sizeof(m_h),&m_h.ret);
         WRITE_SAMPLING_MESSAGE(WAZ, (MESSAGE_ADDR_TYPE)&m_az, sizeof(m_az),&m_az.ret);
         WRITE_SAMPLING_MESSAGE(WVZ, (MESSAGE_ADDR_TYPE)&m_Vz, sizeof(m_Vz),&m_Vz.ret);
