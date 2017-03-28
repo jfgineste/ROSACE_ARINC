@@ -4,8 +4,10 @@ float
 altitude_hold(float h_f, float h_c) {
     float Vz_c     = -2.5;
     static float y = 0.0;
-    static float Ts_h = 1.0/150.0;
+    static float last_y = 0.0;
+    static float Ts_h = 1.0/50.0;
     static float integrator = 532.2730285;
+    //static float integrator = 53.22730285;
 
 //printf(",,%f,%f,,",h_f, h_c);
     if ((h_f - h_c) < -50) {
@@ -18,9 +20,11 @@ altitude_hold(float h_f, float h_c) {
     }
     else {
         // Output
-        y = Kp_h * (h_f - h_c) + Ki_h * integrator;
+        y = Ki_h * integrator + Kp_h * (h_f - h_c)/2;
+        //if(y*last_y<0){y=-y;}
         // State
-        integrator += Ts_h * (h_f - h_c);
+        //last_y=y;
+        integrator = Ts_h * (h_f - h_c);
     }
 
     return y;

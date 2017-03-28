@@ -31,7 +31,7 @@ const float __attribute__((weak)) h_switch   = 50.0;
 //float __attribute__((weak)) h_c      =  11000;
 float __attribute__((weak)) Vz_c     =  2.5;
 float __attribute__((weak)) Va_c     =  0.0;
-float __attribute__((weak)) h_c      =  9000;
+float __attribute__((weak)) h_c      =  8800;
 
 /* Va Speed controller */
 
