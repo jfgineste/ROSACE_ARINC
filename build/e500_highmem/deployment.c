@@ -1178,8 +1178,8 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 33000000,
-            .duration = 18000000,
+            .period = 100000000,
+            .duration = 25000000,
             .partition_id = 0,
 
             .space_id = 1,
@@ -1212,8 +1212,8 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 33000000,
-            .duration = 4000000,
+            .period = 100000000,
+            .duration = 25000000,
             .partition_id = 1,
 
             .space_id = 2,
@@ -1246,8 +1246,8 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 33000000,
-            .duration = 6000000,
+            .period = 100000000,
+            .duration = 25000000,
             .partition_id = 2,
 
             .space_id = 3,
@@ -1280,8 +1280,8 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
             // Allocate 1 event slot per queuing port plus 2 slots for timer.
             .partition_event_max = 0 + 2,
 
-            .period = 33000000,
-            .duration = 5000000,
+            .period = 100000000,
+            .duration = 25000000,
             .partition_id = 3,
 
             .space_id = 4,
@@ -1319,7 +1319,7 @@ pok_partition_t partition_monitor =
 
     .partition_event_max = 0,
 
-    .period = 33000000, 
+    .period = 100000000, 
     .space_id = 0,
 
     .multi_partition_hm_selector = &pok_hm_multi_partition_selector_default,
@@ -1334,7 +1334,7 @@ pok_partition_t partition_gdb =
 
     .partition_event_max = 0,
 
-    .period = 33000000, 
+    .period = 100000000, 
     .space_id = 0,
 
     .multi_partition_hm_selector = &pok_hm_multi_partition_selector_default,
@@ -1345,28 +1345,28 @@ pok_partition_t partition_gdb =
 /************************* Setup time slots ***************************/
 const pok_sched_slot_t pok_module_sched[4] = {
     {
-        .duration = 18000000,
+        .duration = 25000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[0].base_part,
         .periodic_processing_start = TRUE,
         .id = 0
     },
     {
-        .duration = 4000000,
+        .duration = 25000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[1].base_part,
         .periodic_processing_start = TRUE,
         .id = 1
     },
     {
-        .duration = 6000000,
+        .duration = 25000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[2].base_part,
         .periodic_processing_start = TRUE,
         .id = 2
     },
     {
-        .duration = 5000000,
+        .duration = 25000000,
         .offset = 0,
         .partition = &pok_partitions_arinc[3].base_part,
         .periodic_processing_start = TRUE,
@@ -1376,7 +1376,7 @@ const pok_sched_slot_t pok_module_sched[4] = {
 
 const uint8_t pok_module_sched_n = 4;
 
-const pok_time_t pok_config_scheduling_major_frame = 33000000;
+const pok_time_t pok_config_scheduling_major_frame = 100000000;
 
 /************************ Memory blocks ************************/
 #include <core/memblocks_config.h>

@@ -4,7 +4,7 @@ float
 altitude_hold(float h_f, float h_c) {
     float Vz_c     = -2.5;
     static float y = 0.0;
-    static float Ts_h = 1.0/50.0;
+    static float Ts_h = 1.0/150.0;
     static float integrator = 532.2730285;
 
 //printf(",,%f,%f,,",h_f, h_c);
