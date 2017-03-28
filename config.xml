@@ -129,5 +129,13 @@
                 <Standard_Partition PartitionName="P1" PortName="RDELTAE" />
             </Destination>
         </Channel>
+        <Channel>
+            <Source>
+                <Standard_Partition PartitionName="P4" PortName="WT" />
+            </Source>
+            <Destination>
+                <Standard_Partition PartitionName="P1" PortName="RT" />
+            </Destination>
+        </Channel>
     </Connection_Table>
 </chpok-configuration>

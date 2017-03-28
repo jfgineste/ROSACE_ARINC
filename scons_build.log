@@ -1,1 +1,1 @@
-qemu-system-ppc -serial stdio -M ppce500 -cpu e500mc -kernel /home/jaime/ROSACE_ARINC.test/build/e500_highmem/pok.elf
+qemu-system-ppc -serial stdio -M ppce500 -cpu e500mc -kernel /home/jaime/ESSAIS/build/e500_highmem/pok.elf

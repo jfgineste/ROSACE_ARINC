@@ -4,7 +4,7 @@
 #include "../../common/app_code.c"
 
 static SAMPLING_PORT_ID_TYPE RDELTAEC, RDELTATHC;
-static SAMPLING_PORT_ID_TYPE WDELTAE;
+static SAMPLING_PORT_ID_TYPE WDELTAE, WT;
 
 static void P4_process(void) {
 
@@ -14,13 +14,13 @@ static void P4_process(void) {
 
     RETURN_CODE_TYPE ret_pause;
     // output (encapsulated) messages
-    msg m_delta_e;
+    msg m_delta_e, m_T;
 
     // input (encapsulated) messages
     msg m_delta_ec, m_delta_thc;
 
     //float T;
-    float delta_e;
+    float delta_e, T;
     //struct aircraft_dynamics_outs_t res; //structure pour accueillir les résultats de aircraft_dynamics
 
     MESSAGE_SIZE_TYPE len; // don't care
@@ -32,11 +32,15 @@ static void P4_process(void) {
 
 //  int num_instance = 0;
 //  int pd = 1000;
-    delta_e = 0.012009615652468;
+    T = 41813.92119463, delta_e = 0.012009615652468;
 
     m_delta_e.x = 1;
     m_delta_e.data = delta_e;
     m_delta_e.y = -1;
+
+    m_T.x = 1;
+    m_T.data = T;
+    m_T.y = -1;
 
 #if (MODE==TIMER)
 	clock_t start, finish; 
@@ -116,15 +120,18 @@ static void P4_process(void) {
          ************************************************************/
 
         m_delta_e.data = elevator(m_delta_ec.data);
+	m_T.data = engine(m_delta_thc.data);
 #if (MODE==VERBOSE)
         printf("[P4] >>>> %f ; %f <<<<\n",m_delta_ec.data,elevator(m_delta_ec.data));
 #endif
         WRITE_SAMPLING_MESSAGE(WDELTAE, (MESSAGE_ADDR_TYPE)&m_delta_e, sizeof(m_delta_e),&m_delta_e.ret);
+        WRITE_SAMPLING_MESSAGE(WT, (MESSAGE_ADDR_TYPE)&m_T, sizeof(m_T),&m_T.ret);
 #if (MODE==VERBOSE)
         printf("[P4] WDELTAE: new message sent: {%u, \"%f\", %u}\n", m_delta_e.x, m_delta_e.data, m_delta_e.y);
 #endif
         //pause until next slot
         m_delta_e.x++;
+        m_T.x++;
 
 #if (MODE==TIMER)
 	finish = clock(); 
@@ -188,6 +195,7 @@ int P4Main(void) {
 
     RETURN_CODE_TYPE ret;
     CREATE_SAMPLING_PORT("WDELTAE", PORT_SIZE, SOURCE, SAMPLING_PD,&WDELTAE,&ret);
+    CREATE_SAMPLING_PORT("WT", PORT_SIZE, SOURCE, SAMPLING_PD,&WT,&ret);
 
 #if (MODE==VERBOSE)
     printf("[P4] Bilan create output ports: DELTAE=%d\n", (int) WDELTAE);

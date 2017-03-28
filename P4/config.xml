@@ -11,6 +11,7 @@
     <ARINC653_Semaphores Count="16" />
 
     <ARINC653_Ports>
+        <Sampling_Port Name="WT" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="3ms"/>
         <Sampling_Port Name="WDELTAE" MaxMessageSize="16" Direction="SOURCE" MaxNbMessage="10" Refresh="3ms"/>
         <Sampling_Port Name="RDELTATHC" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="3ms" />
         <Sampling_Port Name="RDELTAEC" MaxMessageSize="16" Direction="DESTINATION" MaxNbMessage="10" Refresh="3ms" />

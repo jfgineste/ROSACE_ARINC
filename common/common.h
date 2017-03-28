@@ -15,8 +15,8 @@
 //const float __attribute__((weak)) dt_dx    = 1.0/200.0;
 
 const float __attribute__((weak)) dt       = 0.033f;
-const float __attribute__((weak)) dt_de    = 0.033f;
-const float __attribute__((weak)) dt_dx    = 0.033f;
+const float __attribute__((weak)) dt_de    = 0.033;
+const float __attribute__((weak)) dt_dx    = 0.033;
 
 /* Controller parameters */
 /* Altitude hold */

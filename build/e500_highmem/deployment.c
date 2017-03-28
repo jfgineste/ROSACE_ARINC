@@ -197,7 +197,10 @@ pok_channel_queuing_t pok_channels_queuing[0] = {
 uint8_t pok_channels_queuing_n = 0;
 
 /****************** Setup sampling channels ***************************/
-pok_channel_sampling_t pok_channels_sampling[13] = {
+pok_channel_sampling_t pok_channels_sampling[14] = {
+    {
+        .max_message_size = 16,
+    },
     {
         .max_message_size = 16,
     },
@@ -239,7 +242,7 @@ pok_channel_sampling_t pok_channels_sampling[13] = {
     },
 };
 
-uint8_t pok_channels_sampling_n = 13;
+uint8_t pok_channels_sampling_n = 14;
 
 /****************** Setup partition0 (auxiliary) **********************/
 // HM partition level selector.
@@ -434,7 +437,7 @@ static pok_port_queuing_t partition_ports_queuing_0[0] = {
 };
 
 // Sampling ports
-static pok_port_sampling_t partition_ports_sampling_0[6] = {
+static pok_port_sampling_t partition_ports_sampling_0[7] = {
     {
         .name = "WH",
         .channel = &pok_channels_sampling[0],
@@ -463,6 +466,11 @@ static pok_port_sampling_t partition_ports_sampling_0[6] = {
     {
         .name = "RDELTAE",
         .channel = &pok_channels_sampling[12],
+        .direction = POK_PORT_DIRECTION_IN,
+    },
+    {
+        .name = "RT",
+        .channel = &pok_channels_sampling[13],
         .direction = POK_PORT_DIRECTION_IN,
     },
 };
@@ -1137,7 +1145,12 @@ static pok_port_queuing_t partition_ports_queuing_3[0] = {
 };
 
 // Sampling ports
-static pok_port_sampling_t partition_ports_sampling_3[3] = {
+static pok_port_sampling_t partition_ports_sampling_3[4] = {
+    {
+        .name = "WT",
+        .channel = &pok_channels_sampling[13],
+        .direction = POK_PORT_DIRECTION_OUT,
+    },
     {
         .name = "WDELTAE",
         .channel = &pok_channels_sampling[12],
@@ -1185,7 +1198,7 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
         .nports_queuing = 0,
 
         .ports_sampling = partition_ports_sampling_0,
-        .nports_sampling = 6, 
+        .nports_sampling = 7, 
         .partition_hm_selector = &partition_hm_selector_0,
 
         .thread_error_info = &partition_thread_error_info_0,
@@ -1287,7 +1300,7 @@ pok_partition_arinc_t pok_partitions_arinc[4] = {
         .nports_queuing = 0,
 
         .ports_sampling = partition_ports_sampling_3,
-        .nports_sampling = 3, 
+        .nports_sampling = 4, 
         .partition_hm_selector = &partition_hm_selector_3,
 
         .thread_error_info = &partition_thread_error_info_3,

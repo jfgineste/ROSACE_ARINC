@@ -4,7 +4,7 @@
 #include "../../common/app.h"
 #include "../../common/app_code.c"
 
-static SAMPLING_PORT_ID_TYPE RDELTAE;
+static SAMPLING_PORT_ID_TYPE RDELTAE, RT;
 static SAMPLING_PORT_ID_TYPE WH, WAZ, WVZ, WQ, WVA;
 
 static void P1_process(void) {
@@ -19,7 +19,8 @@ static void P1_process(void) {
     msg m_Va, m_h, m_az, m_Vz, m_q;
 
     // input (encapsulated) messages
-    msg m_delta_e;
+    msg m_delta_e, m_T;
+    unsigned last_m_T = 0;
 
     float T;
     struct aircraft_dynamics_outs_t res; //structure pour accueillir les résultats de aircraft_dynamics
@@ -98,9 +99,31 @@ static void P1_process(void) {
             }
             last_m_delta_e = m_delta_e.x;
 #endif
+
+            //READ T
+            READ_SAMPLING_MESSAGE(RT, (MESSAGE_ADDR_TYPE)&m_T,&len,&validity,&m_T.ret);
+
+#if (MODE==VERBOSE)
+            if (m_T.ret == NO_ERROR) {
+//		if (num_instance % pd == 0) {
+                printf("[P1] RT: new message read: {%u, \"%f\", %u}\n", m_T.x, m_T.data, m_T.y);
+//		}
+            } else {
+                printf("[P1] RT: Unable to read message: %u\n", m_T.ret);
+            }
+
+            if (m_T.x < last_m_T) {
+                printf("[P1] RTC: warning: received message out of order\n");
+            } else if (m_T.x > last_m_T + 1) {
+                printf("[P1] RTC: warning: possible message loss (jumped from id=%d to id=%d)\n", last_m_T, m_T.x);
+            } else if (m_T.x == last_m_T) {
+                printf("[P1] RTC: warning: possible duplicate message (id=%d)\n", m_T.x);
+            }
+            last_m_T = m_T.x;
+#endif
         }
         initialized=1;
-        aircraft_dynamics(m_delta_e.data, T,&res);
+        aircraft_dynamics(m_delta_e.data, m_T.data,&res);
 
         m_h.data = res.h;
         m_az.data = res.az;
@@ -198,6 +221,7 @@ int P1Main(void) {
     strncpy(P1_process_attrs.NAME, "P1_process", sizeof(PROCESS_NAME_TYPE));
 
     CREATE_PROCESS(&P1_process_attrs,&pid_P1,&ret_process);
+
 #if (MODE==VERBOSE)
     if (ret_process != NO_ERROR) {
         printf("[P1] couldn't create P1_process: %d\n", (int) ret_process);
@@ -230,6 +254,7 @@ int P1Main(void) {
 
 
     CREATE_SAMPLING_PORT("RDELTAE", PORT_SIZE, DESTINATION, SAMPLING_PD,&RDELTAE,&ret);
+    CREATE_SAMPLING_PORT("RT", PORT_SIZE, DESTINATION, SAMPLING_PD,&RT,&ret);
 
 #if (MODE==VERBOSE)
     printf("[P1] Bilan create input ports: DELTA_E=%d\n", (int) RDELTAE);
