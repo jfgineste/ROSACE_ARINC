@@ -1,0 +1,5 @@
+Checking for Flight Level Change control...
+Properties for h output
+('P2 (overshoot          ) =', 0.0, '%')
+('P4 (steady state error ) =', 0.01552734375, '%')
+

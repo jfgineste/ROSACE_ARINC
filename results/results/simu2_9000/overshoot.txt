@@ -1,3 +1,0 @@
-Properties for h output
-('P2 (overshoot          ) =', 99.99404296875, '%')
-('P4 (steady state error ) =', 199.99091796875, '%')

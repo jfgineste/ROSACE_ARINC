@@ -32,7 +32,7 @@ static void P1_process(void) {
 #endif
     int num_instance = 0;
 //    int pd = 1000;
-    int pd = 33;
+    int pd = 50;
 
 
 #if (MODE==TIMER)
@@ -163,7 +163,7 @@ static void P1_process(void) {
     }
 
 #endif
-        num_instance += 33; // un cycle=33ms
+        num_instance += 63; // un cycle=63ms
 
         // run during 10 minutes
         if (num_instance > (1000 * 60 * 10)) {

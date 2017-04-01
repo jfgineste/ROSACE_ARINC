@@ -14,9 +14,9 @@
 //const float __attribute__((weak)) dt_de    = 1.0/200.0;
 //const float __attribute__((weak)) dt_dx    = 1.0/200.0;
 
-const float __attribute__((weak)) dt       = 0.033f;
-const float __attribute__((weak)) dt_de    = 0.033;
-const float __attribute__((weak)) dt_dx    = 0.033;
+const float __attribute__((weak)) dt       = 0.063f;
+const float __attribute__((weak)) dt_de    = 0.063;
+const float __attribute__((weak)) dt_dx    = 0.063;
 
 /* Controller parameters */
 /* Altitude hold */
@@ -28,10 +28,10 @@ const float __attribute__((weak)) h_switch   = 50.0;
 // Setpoint commands
 //float __attribute__((weak)) Vz_c     = -2.5;
 //float __attribute__((weak)) Va_c     =  0.0;
-//float __attribute__((weak)) h_c      =  11000;
+//float __attribute__((weak)) h_c      =  10000;
 float __attribute__((weak)) Vz_c     =  2.5;
 float __attribute__((weak)) Va_c     =  0.0;
-float __attribute__((weak)) h_c      =  8800;
+float __attribute__((weak)) h_c      =  9500;
 
 /* Va Speed controller */
 
