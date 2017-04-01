@@ -32,7 +32,7 @@ static void P1_process(void) {
 #endif
     int num_instance = 0;
 //    int pd = 1000;
-    int pd = 50;
+    int pd = 63;
 
 
 #if (MODE==TIMER)
